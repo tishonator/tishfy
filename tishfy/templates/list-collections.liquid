@@ -1,0 +1,64 @@
+{% comment %}
+  Loop through each collection, except 'frontpage'
+{% endcomment %}
+
+{% render 'breadcrumb' %}
+
+<div id="main-content" class="main-content single-product products-collection section-space--ptb_30">
+	<div class="content-area container">
+		<div class="row-full-width"></div>
+		<div class="row">
+			{% assign productIndex = 1 %}
+			{% for collection in collections %}
+    {% unless collection.handle == 'frontpage' %}
+      {% assign collection_item_width = 'medium-down--one-half large--one-third' %}
+      {% assign featured = collection.handle %}
+
+	{% if collection.image %}
+	  {%- assign collection_image = collection.image -%}
+	{% elsif collection.products.first and collection.products.first.images != empty %}
+	  {%- assign collection_image = collection.products.first.featured_image -%}
+	{% else %}
+	  {% assign collection_image = blank %}
+	{% endif %}
+
+	<div class="col-sm-4 category-grid-item mb-40 text-center">
+	  <a href="{% if collection.products == empty %}#{% else %}{{ collection.url }}{% endif %}" class="collection-grid-item">
+	    {% unless collection_image == blank %}
+	    	<img class="product_collection_image" src="{{ collection_image | img_url: '1024x1024' }}" alt="{{ collection_image.alt | escape }}" id="ProductPhotoImg" data-zoom-image="{{ collection_image | img_url: '1024x1024' }}" data-image-id="{{ collection_image.id }}">
+	    {% else %}
+	      {% if collection == empty %}
+	        <div class="collection-grid-item__overlay">
+	          {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
+	          {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+	        </div>
+	      {% else %}
+	        <div class="collection-grid-item__overlay" style="background-image: url('{{ collection_image | img_url: '1024x1024' }}')"></div>
+	      {% endif %}
+	    {% endunless %}
+
+	    <div class="collection-grid-item__title-wrapper">
+	      <div class="collection-grid-item__title h3">
+	        {% if collection.title == blank %}
+	          {{ 'homepage.onboarding.collection_title' | t }}
+	        {% else %}
+	          {{ collection.title }}
+	        {% endif %}
+	      </div>
+	    </div>
+	  </a>
+	</div>
+
+	{% assign index_modulo = productIndex | modulo: 3 %}
+	{% if index_modulo == 0 %}
+		<div class="clearfix"></div>
+	{% endif %}
+	{% assign productIndex = productIndex | plus: 1 %}
+
+
+    {% endunless %}
+  {% endfor %}
+		</div>
+	</div>
+</div>
+

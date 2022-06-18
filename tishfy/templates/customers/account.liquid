@@ -1,0 +1,136 @@
+{% render 'breadcrumb' %}
+
+<div id="main-content" class="section-space--pt_60">
+	<div class="content-area container">
+		<div class="site-main section-space--pb_60">
+			
+			<div class="row">
+				<div class="col-12">
+					<div class="account-detail">
+						<h3 class="heading-title">
+							<span>{{ 'customer.account.details' | t }}</span>
+						</h3>
+
+						<h5>{{ customer.name }}</h5>
+
+						{% if customer.default_address != nil %}
+						<p>
+							{{ customer.default_address.address1 }}<br>
+
+							{% if customer.default_address.address2 != "" %}
+								{{ customer.default_address.address2 }}<br>
+							{% endif %}
+
+							{% if customer.default_address.city != "" %}
+								{{ customer.default_address.city }}<br>
+							{% endif %}
+
+							{% if customer.default_address.province_code != "" %}
+								{{ customer.default_address.province_code | upcase }}<br>
+							{% endif %}
+
+							{% if customer.default_address.zip != "" %}
+								{{ customer.default_address.zip | upcase }}<br>
+							{% endif %}
+
+							{% if customer.default_address.country != "" %}
+								{{ customer.default_address.country }}<br>
+							{% endif %}
+
+							{% if customer.default_address.phone != "" %}
+								{{ customer.default_address.phone }}
+							{% endif %}
+						</p>
+
+						{% endif %}
+
+						<p>
+							<a class="btn btn--black" href="/account/addresses">
+								{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
+							</a>
+						</p>
+
+					</div>
+				</div>
+				<div class="col-12">
+					<div class="account-orders section-space--pt_60">
+						<h3 class="heading-title">
+							<span>{{ 'customer.orders.title' | t }}</span>
+						</h3>
+
+						{% paginate customer.orders by 20 %}
+
+							{% if customer.orders.size != 0 %}
+
+								<div class="table-wrap">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>{{ 'customer.orders.order_number' | t }}</th>
+												<th>{{ 'customer.orders.date' | t }}</th>
+												<th>{{ 'customer.orders.payment_status' | t }}</th>
+												<th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+												<th>{{ 'customer.orders.total' | t }}</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for order in customer.orders %}
+												<tr>
+													<td>{{ order.name | link_to: order.customer_url }}</td>
+													<td>{{ order.created_at | date: "%b %d, %Y" }}</td>
+													<td>{{ order.financial_status_label }}</td>
+													<td>{{ order.fulfillment_status_label }}</td>
+													<td>{{ order.total_price | money }}</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+
+								{% else %}
+
+								<p>{{ 'customer.orders.none' | t }}</p>
+
+							{% endif %}
+
+							{% if paginate.pages > 1 %}
+								<div class="text-center">
+									<ul class="pagination">
+									{% if paginate.previous %}
+										<li><a href="{{ paginate.previous.url }}" title="{{ paginate.previous.title }}" data-page="{{ paginate.current_page | minus:1 }}">&laquo;</a></li>
+									{% else %}
+										<li class="disabled" style="display:none;"><span>&laquo;</span></li>
+									{% endif %}
+
+									{% for part in paginate.parts %}
+										{% if part.is_link %}
+											<li>
+												<a href="{{ part.url }}" title="" data-page="{{ part.title }}">{{ part.title }}</a>
+											</li>
+										{% else %}
+											{% if part.title == paginate.current_page %}
+												<li class="active"><span>{{ part.title }}</span></li>
+											{% else %}
+												<li><span>{{ part.title }}</span></li>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+
+								  	{% if paginate.next %}
+								    	<li><a href="{{ paginate.next.url }}" title="{{ paginate.next.title }}" data-page="{{ paginate.current_page | plus:1 }}">&raquo;</a></li>
+								  	{% else %}
+								    	<li class="disabled" style="display:none;"><span>&raquo;</span></li>
+								  	{% endif %}
+								</ul>
+								</div>
+							{% endif %}
+
+						{% endpaginate %}
+					</div>
+				</div>
+			</div>
+
+		</div> <!-- end .site-main -->
+	</div> <!-- end .content-area -->
+</div> <!-- end .main-content -->
+

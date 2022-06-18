@@ -1,0 +1,27 @@
+<div class="product-sidebar sidebar-inner">
+
+	<div class="shop-widget widget-shop-categories">
+		<h6 class="mb-20">Categories</h6>
+		<ul class="widget-nav-list">
+			{% for product_type in collection.all_types %}
+			  <li>{{ product_type | link_to_type }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+
+	<div class="shop-widget">
+		<div class="product-filter">
+			<h6 class="mb-20">Tags</h6>
+			<div class="tagcloud">
+				{% for product_tag in collection.tags %}
+					{{ product_tag | link_to_type }}
+				{% endfor %}
+			</div>
+        </div>
+	</div>
+<!--
+	<div>
+		<a href="#" class="clear-all-filter">Clear all</a>
+	</div>
+-->
+</div>

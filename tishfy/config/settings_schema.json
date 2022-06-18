@@ -1,0 +1,859 @@
+[
+  {
+    "name": "theme_info",
+    "logo": "https:\/\/cdn.shopify.com\/s\/global\/branding\/shopify_logo_256x256.png",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Tishfy Theme"
+      },
+      {
+        "type": "paragraph",
+        "content": "This theme is fully supported by Shopify. For support and customizations, contact [theme-support@shopify.com](mailto:theme-support@shopify.com?subject=[Launchpad]+Theme+Support)."
+      }
+    ]
+  },
+  {
+    "name": "General",
+    "settings": [
+      {
+        "type": "image",
+        "id": "favicon.png",
+        "label": "Favicon Icon"
+      },
+      {
+        "type": "header",
+        "content": "Color Setting"
+      },
+      {
+        "type": "color",
+        "id": "main_color",
+        "label": "Main Color",
+        "default": "#dcb14a"
+      },
+      {
+        "type": "color",
+        "id": "title_color",
+        "label": "Title Color",
+        "default": "#111111"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color ( body color )",
+        "default": "#333333"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_notes_enable",
+        "label": "Enable order notes"
+      }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "image",
+        "id": "logo.png",
+        "label": "Custom Logo"
+      },
+      {
+        "type": "text",
+        "id": "header_phone",
+        "label": "Header Phone"
+      },
+      {
+        "type": "link_list",
+        "id": "megamenu_menu",
+        "label": "Header Menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_1",
+        "label": "Display Mega Menu Custom Content for Menu Item #1"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_1",
+        "label": "Megamenu Custom HTML block for Menu Item #1"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_2",
+        "label": "Display Mega Menu Custom Content for Menu Item #2"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_2",
+        "label": "Megamenu Custom HTML block for Menu Item #2"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_3",
+        "label": "Display Mega Menu Custom Content for Menu Item #3"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_3",
+        "label": "Megamenu Custom HTML block for Menu Item #3"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_4",
+        "label": "Display Mega Menu Custom Content for Menu Item #4"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_4",
+        "label": "Megamenu Custom HTML block for Menu Item #4"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_5",
+        "label": "Display Mega Menu Custom Content for Menu Item #5"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_5",
+        "label": "Megamenu Custom HTML block for Menu Item #5"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_6",
+        "label": "Display Mega Menu Custom Content for Menu Item #6"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_6",
+        "label": "Megamenu Custom HTML block for Menu Item #6"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_7",
+        "label": "Display Mega Menu Custom Content for Menu Item #7"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_7",
+        "label": "Megamenu Custom HTML block for Menu Item #7"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_8",
+        "label": "Display Mega Menu Custom Content for Menu Item #8"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_8",
+        "label": "Megamenu Custom HTML block for Menu Item #8"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_9",
+        "label": "Display Mega Menu Custom Content for Menu Item #9"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_9",
+        "label": "Megamenu Custom HTML block for Menu Item #9"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_megamenu_custom_content_10",
+        "label": "Display Mega Menu Custom Content for Menu Item #10"
+      },
+      {
+        "type": "textarea",
+        "id": "megamenu_custom_content_10",
+        "label": "Megamenu Custom HTML block for Menu Item #10"
+      }
+    ]
+  },
+  {
+    "name": "Homepage Slider",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_homepage_slider",
+        "label": "Display Homepage Slider",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Slide #1"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_slide_1",
+        "label": "Display Slide #1"
+      },
+      {
+        "type": "image",
+        "id": "slide1.png",
+        "label": "Slide #1 Image"
+      },
+      {
+        "type": "textarea",
+        "id": "slide_1_content",
+        "label": "Slide 1 Content (HTML)"
+      },
+      {
+        "type": "header",
+        "content": "Slide #2"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_slide_2",
+        "label": "Display Slide #2"
+      },
+      {
+        "type": "image",
+        "id": "slide2.png",
+        "label": "Slide #2 Image"
+      },
+      {
+        "type": "textarea",
+        "id": "slide_2_content",
+        "label": "Slide 2 Content (HTML)"
+      },
+      {
+        "type": "header",
+        "content": "Slide #3"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_slide_3",
+        "label": "Display Slide #3"
+      },
+      {
+        "type": "image",
+        "id": "slide3.png",
+        "label": "Slide #3 Image"
+      },
+      {
+        "type": "textarea",
+        "id": "slide_3_content",
+        "label": "Slide 3 Content (HTML)"
+      },
+      {
+        "type": "header",
+        "content": "Slide #4"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_slide_4",
+        "label": "Display Slide #4"
+      },
+      {
+        "type": "image",
+        "id": "slide4.png",
+        "label": "Slide #4 Image"
+      },
+      {
+        "type": "textarea",
+        "id": "slide_4_content",
+        "label": "Slide 4 Content (HTML)"
+      },
+      {
+        "type": "header",
+        "content": "Slide #5"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_slide_5",
+        "label": "Display Slide #5"
+      },
+      {
+        "type": "image",
+        "id": "slide5.png",
+        "label": "Slide #5 Image"
+      },
+      {
+        "type": "textarea",
+        "id": "slide_5_content",
+        "label": "Slide 5 Content (HTML)"
+      }
+    ]
+  },
+  {
+    "name": "Homepage Welcome Section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_homepage_welcome_msg",
+        "label": "Display Homepage Welcome Message",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "homepage_welcome_title",
+        "label": "Homepage Welcome Title"
+      },
+      {
+        "type": "textarea",
+        "id": "homepage_welcome_text",
+        "label": "Homepage Welcome Text (HTML)"
+      }
+    ]
+  },
+  {
+    "name": "Homepage Products",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_homepage_products",
+        "label": "Display Homepage Products"
+      },
+      {
+        "type": "text",
+        "id": "homepage_products_title",
+        "label": "Title"
+      },
+      {
+        "type": "collection",
+        "id": "homepage_products_collection",
+        "label": "Homepage Collection"
+      },
+      {
+        "type": "text",
+        "id": "homepage_products_count",
+        "label": "Homepage Products Count",
+        "default": "6"
+      },
+      {
+        "type": "select",
+        "id": "homepage_products_per_row",
+        "label": "Homepage Products per Row",
+        "default": "3",
+        "options": [
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Homepage Blog Posts",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_homepage_blog",
+        "label": "Display Homepage Blog Posts"
+      },
+      {
+        "type": "text",
+        "id": "homepage_blog_title",
+        "label": "Latest Blog Posts Title"
+      },
+      {
+        "type": "blog",
+        "id": "homepage_blog_name",
+        "label": "Homepage Blog"
+      },
+      {
+        "type": "text",
+        "id": "homepage_blog_limit",
+        "label": "Number of posts to show",
+        "default": "3"
+      }
+    ]
+  },
+  {
+    "name": "Homepage Brands",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_brands",
+        "label": "Display Homepage Brands"
+      },
+      {
+        "type": "text",
+        "id": "brands_title",
+        "label": "Brands Title"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_1",
+        "label": "Display Brand #1"
+      },
+      {
+        "type": "image",
+        "id": "brand1.png",
+        "label": "Brand #1 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_1_link",
+        "label": "Brand #1 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_2",
+        "label": "Display Brand #2"
+      },
+      {
+        "type": "image",
+        "id": "brand2.png",
+        "label": "Brand #2 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_2_link",
+        "label": "Brand #2 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_3",
+        "label": "Display Brand #3"
+      },
+      {
+        "type": "image",
+        "id": "brand3.png",
+        "label": "Brand #3 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_3_link",
+        "label": "Brand #3 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_4",
+        "label": "Display Brand #4"
+      },
+      {
+        "type": "image",
+        "id": "brand4.png",
+        "label": "Brand #4 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_4_link",
+        "label": "Brand #4 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_5",
+        "label": "Display Brand #5"
+      },
+      {
+        "type": "image",
+        "id": "brand5.png",
+        "label": "Brand #5 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_5_link",
+        "label": "Brand #5 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_6",
+        "label": "Display Brand #6"
+      },
+      {
+        "type": "image",
+        "id": "brand6.png",
+        "label": "Brand #6 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_6_link",
+        "label": "Brand #6 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_7",
+        "label": "Display Brand #7"
+      },
+      {
+        "type": "image",
+        "id": "brand7.png",
+        "label": "Brand #7 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_7_link",
+        "label": "Brand #7 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_8",
+        "label": "Display Brand #8"
+      },
+      {
+        "type": "image",
+        "id": "brand8.png",
+        "label": "Brand #8 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_8_link",
+        "label": "Brand #8 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_9",
+        "label": "Display Brand #9"
+      },
+      {
+        "type": "image",
+        "id": "brand9.png",
+        "label": "Brand #9 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_9_link",
+        "label": "Brand #9 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_10",
+        "label": "Display Brand #10"
+      },
+      {
+        "type": "image",
+        "id": "brand10.png",
+        "label": "Brand #10 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_10_link",
+        "label": "Brand #10 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_11",
+        "label": "Display Brand #11"
+      },
+      {
+        "type": "image",
+        "id": "brand11.png",
+        "label": "Brand #11 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_11_link",
+        "label": "Brand #11 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_12",
+        "label": "Display Brand #12"
+      },
+      {
+        "type": "image",
+        "id": "brand12.png",
+        "label": "Brand #12 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_12_link",
+        "label": "Brand #12 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_13",
+        "label": "Display Brand #13"
+      },
+      {
+        "type": "image",
+        "id": "brand13.png",
+        "label": "Brand #13 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_13_link",
+        "label": "Brand #13 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_14",
+        "label": "Display Brand #14"
+      },
+      {
+        "type": "image",
+        "id": "brand14.png",
+        "label": "Brand #14 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_14_link",
+        "label": "Brand #14 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_15",
+        "label": "Display Brand #15"
+      },
+      {
+        "type": "image",
+        "id": "brand15.png",
+        "label": "Brand #15 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_15_link",
+        "label": "Brand #15 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_16",
+        "label": "Display Brand #16"
+      },
+      {
+        "type": "image",
+        "id": "brand16.png",
+        "label": "Brand #16 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_16_link",
+        "label": "Brand #16 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_17",
+        "label": "Display Brand #17"
+      },
+      {
+        "type": "image",
+        "id": "brand17.png",
+        "label": "Brand #17 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_17_link",
+        "label": "Brand #17 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_18",
+        "label": "Display Brand #18"
+      },
+      {
+        "type": "image",
+        "id": "brand18.png",
+        "label": "Brand #18 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_18_link",
+        "label": "Brand #18 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_19",
+        "label": "Display Brand #19"
+      },
+      {
+        "type": "image",
+        "id": "brand19.png",
+        "label": "Brand #19 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_19_link",
+        "label": "Brand #19 URL Link"
+      },
+      {
+        "type": "checkbox",
+        "id": "display_brand_20",
+        "label": "Display Brand #20"
+      },
+      {
+        "type": "image",
+        "id": "brand20.png",
+        "label": "Brand #20 Image"
+      },
+      {
+        "type": "text",
+        "id": "brand_20_link",
+        "label": "Brand #20 URL Link"
+      }
+    ]
+  },
+  {
+    "name": "Products",
+    "settings": [
+      {
+        "type": "select",
+        "id": "product_collection_products_per_row",
+        "label": "Products in Collection per Row",
+        "default": "3",
+        "options": [
+          {
+            "value": "2",
+            "label": "2 columns"
+          },
+          {
+            "value": "3",
+            "label": "3 columns"
+          },
+          {
+            "value": "4",
+            "label": "4 columns"
+          },
+          {
+            "value": "5",
+            "label": "5 columns"
+          },
+          {
+            "value": "6",
+            "label": "6 columns"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "product_collection_number_of_rows",
+        "label": "Number of Rows per Collection page",
+        "default": "2",
+        "options": [
+          {
+            "value": "2",
+            "label": "2 rows"
+          },
+          {
+            "value": "3",
+            "label": "3 rows"
+          },
+          {
+            "value": "4",
+            "label": "4 rows"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "display_product_collection_sidebar",
+        "label": "Display Collection Refinements Sidebar"
+      }
+    ]
+  },
+  {
+    "name": "Newsletter",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_newsletter_homepage",
+        "label": "Display Newsletter Form in Homepage",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "newsletter_homepage_title",
+        "label": "Title",
+        "default": "Newsletter"
+      },
+      {
+        "type": "text",
+        "id": "newsletter_homepage_desc",
+        "label": "Description",
+        "default": "Sign up to get exclusive offers from our store"
+      },
+      {
+        "type": "textarea",
+        "id": "newsletter_homepage_form_code",
+        "label": "Newsletter Form HTML Code"
+      }
+    ]
+  },
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "text",
+        "id": "footer_ttl_col_1",
+        "label": "Footer Column #1 Title",
+        "default": "About us"
+      },
+      {
+        "type": "textarea",
+        "id": "footer_content_col_1",
+        "label": "Footer Column #1 Content",
+        "default": "<address><i class=\"fa fa-map-marker\"><\/i> 12 North Thompson Street Richmond, VA 23221 <br> <i class=\"fa fa-phone\"><\/i> (804) 359-1337 <br> <i class=\"fa fa-envelope\"><\/i> <a href=\"mailto:info@example.com\">info@example.com<\/a> <\/address>"
+      },
+      {
+        "type": "text",
+        "id": "footer_ttl_col_2",
+        "label": "Footer Column #2 Title"
+      },
+      {
+        "type": "textarea",
+        "id": "footer_content_col_2",
+        "label": "Footer Column #2 Content"
+      },
+      {
+        "type": "text",
+        "id": "footer_ttl_col_3",
+        "label": "Footer Column #3 Title"
+      },
+      {
+        "type": "textarea",
+        "id": "footer_content_col_3",
+        "label": "Footer Column #3 Content"
+      },
+      {
+        "type": "text",
+        "id": "footer_ttl_col_4",
+        "label": "Footer Column #4 Title"
+      },
+      {
+        "type": "textarea",
+        "id": "footer_content_col_4",
+        "label": "Footer Column #4 Content"
+      },
+      {
+        "type": "text",
+        "id": "footer_social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "footer_social_twitter",
+        "label": "Twitter URL"
+      },
+      {
+        "type": "text",
+        "id": "footer_social_linkedin",
+        "label": "LinkedIn URL"
+      },
+      {
+        "type": "text",
+        "id": "footer_social_pinterest",
+        "label": "Pinterest URL"
+      },
+      {
+        "type": "text",
+        "id": "footer_social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "footer_social_youtube",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "text",
+        "id": "footer_copyright_text",
+        "label": "Footer copyright text"
+      }
+    ]
+  }
+]

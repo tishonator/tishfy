@@ -1,0 +1,64 @@
+{% if template contains 'article' or template contains 'blog' %}
+  	{% capture permalinkURL %}{{ shop.url }}{{ article.url }}{% endcapture %}
+  	{% capture shareTitle %}{{ article.title | url_param_escape }}{% endcapture %}
+{% elsif template contains 'product' %}
+  	{% capture permalinkURL %}{{ shop.url }}{{ product.url }}{% endcapture %}
+  	{% capture shareTitle %}{{ product.title | url_param_escape }}{% endcapture %}
+{% elsif template == 'password' %}
+  	{% capture permalinkURL %}{{ shop.url }}{% endcapture %}
+  	{% capture shareTitle %}{% unless shop.description == blank %}{{ shop.description | url_param_escape }}{% else %}{{ shop.name | url_param_escape }}{% endunless %}{% endcapture %}
+{% endif %}
+
+
+<ul class="social-networks clearfix list-unstyled" data-permalink="{{ permalinkURL }}">
+	<li class="facebook">
+		<div id="fb-root"></div>
+	  	<script>(function(d, s, id) {
+	    		var js, fjs = d.getElementsByTagName(s)[0];
+	    		if (d.getElementById(id)) return;
+	    		js = d.createElement(s); js.id = id;
+	    		js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12";
+	    		fjs.parentNode.insertBefore(js, fjs);
+	  		}(document, 'script', 'facebook-jssdk'));
+	  	</script>
+	  	<div class="fb-share-button" 
+		    data-href="{{ permalinkURL }}" 
+		    data-layout="button_count">
+		  </div>
+	</li>
+	<li class="twitter">
+		<script>window.twttr = (function(d, s, id) {
+				  var js, fjs = d.getElementsByTagName(s)[0],
+				    t = window.twttr || {};
+				  if (d.getElementById(id)) return t;
+				  js = d.createElement(s);
+				  js.id = id;
+				  js.src = "https://platform.twitter.com/widgets.js";
+				  fjs.parentNode.insertBefore(js, fjs);
+
+				  t._e = [];
+				  t.ready = function(f) {
+				    t._e.push(f);
+				  };
+
+				  return t;
+				}(document, "script", "twitter-wjs"));
+			</script>
+			<a class="twitter-share-button"
+			  href="https://twitter.com/intent/tweet">
+			Tweet</a>
+	</li>
+	<li class="linkedin">
+		<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+			<script type="IN/Share"></script>
+	</li>
+	{% if product.featured_image or article.image %}
+		<li id="pin-save-button">
+			<script
+			    type="text/javascript"
+			    async defer
+			    src="//assets.pinterest.com/js/pinit.js"></script>
+			<a href="https://www.pinterest.com/pin/create/button/" data-pin-do="buttonBookmark"></a>
+		</li>
+	{% endif %}
+</ul>

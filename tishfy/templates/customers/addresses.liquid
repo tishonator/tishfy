@@ -1,0 +1,316 @@
+{% render 'breadcrumb' %}
+
+{% paginate customer.addresses by 5 %}
+
+<div id="main-content" class="section-space--pt_60">
+	<div class="content-area container">
+		<div class="site-main section-space--pb_60">
+			
+			<div class="row account-addresses">
+				<div class="col-sm-3">
+					<div class="list-group">
+						<a data-toggle="tab" href="#user-addresses" class="list-group-item active">
+							{{ 'customer.addresses.title' | t }}
+						</a>
+						<a data-toggle="tab" href="#user-add-address" class="list-group-item">
+							{{ 'customer.addresses.add_new' | t }}
+						</a>
+						<a href="/account" class="list-group-item">
+							{{ 'customer.account.return' | t }}
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-9">
+					<div class="address-inner clcearfix">
+						<div class="tab-content">
+							<div id="user-addresses" class="tab-pane fade in active">
+								
+								{% for address in customer.addresses %}
+
+									<h3 class="name">
+										{{ address.first_name | capitalize }} {{address.last_name | capitalize }}
+										{% if address == customer.default_address %}({{ 'customer.addresses.default' | t }}){% endif %}
+									</h3>
+
+									<address>
+										{{ address.company }}<br>
+										{{ address.street }}<br>
+										{{ address.city | capitalize }}<br>
+										{% if address.province_code %}
+											{{ address.province_code | upcase }}<br>
+										{% endif %}
+										{{ address.zip | upcase }}<br>
+										{{ address.country }}<br>
+										{{ address.phone }}
+									</address>
+									<p>
+										{{ 'customer.addresses.edit' | t | edit_customer_address_link: address.id }} |
+										{{ 'customer.addresses.delete' | t | delete_customer_address_link: address.id }}
+									</p>
+									{% form 'customer_address', address %}
+									<div class="form-horizontal" id="EditAddress_{{address.id}}" {% unless form.errors %}style="display:none;"{% endunless %}>
+										<hr>
+										<h3 class="heading-title">
+											<span>{{ 'customer.addresses.edit_address' | t }}</span>
+										</h3>
+
+										{{ form.errors | default_errors }}
+										
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="AddressFirstName_{{form.id}}">{{ 'customer.addresses.first_name' | t }}</label>
+									        <div class="col-sm-4">
+												<input type="text" id="AddressFirstName_{{form.id}}" class="address_form form-control" name="address[first_name]" value="{{form.first_name}}" >
+									        </div>
+					        			</div>
+
+					        			<div class="form-group">
+											<label class="col-sm-2 control-label" for="AddressLastName_{{form.id}}">{{ 'customer.addresses.last_name' | t }}</label>
+									        <div class="col-sm-4">
+												<input type="text" id="AddressLastName_{{form.id}}" class="address_form form-control" name="address[last_name]" value="{{form.last_name}}" >
+									        </div>
+					        			</div>
+
+					        			<div class="form-group">
+											<label class="col-sm-2 control-label" for="AddressCompany_{{form.id}}">{{ 'customer.addresses.company' | t }}</label>
+									        <div class="col-sm-4">
+												<input type="text" id="AddressCompany_{{form.id}}" class="address_form form-control" name="address[company]" value="{{form.company}}" >
+									        </div>
+					        			</div>
+
+					        			<div class="form-group">
+											<label class="col-sm-2 control-label" for="AddressAddress1_{{form.id}}">{{ 'customer.addresses.address1' | t }}</label>
+									        <div class="col-sm-4">
+												<input type="text" id="AddressAddress1_{{form.id}}" class="address_form form-control" name="address[address1]" value="{{form.address1}}" >
+									        </div>
+									        <label class="col-sm-2 control-label" for="AddressAddress2_{{form.id}}">{{ 'customer.addresses.address2' | t }}</label>
+									        <div class="col-sm-4">
+												<input type="text" id="AddressAddress2_{{form.id}}" class="address_form form-control" name="address[address2]" value="{{form.address2}}" >
+									        </div>
+					        			</div>
+
+					        			<div class="form-group">
+											<label class="col-sm-2 control-label" for="AddressCity_{{form.id}}">{{ 'customer.addresses.city' | t }}</label>
+									        <div class="col-sm-4">
+												<input type="text" id="AddressCity_{{form.id}}" class="address_form form-control" name="address[city]" value="{{form.city}}" >
+									        </div>
+					        			</div>
+										
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="AddressCountry_{{form.id}}">{{ 'customer.addresses.country' | t }}</label>
+									        <div class="col-sm-4">
+												<select class="form-control" id="AddressCountry_{{form.id}}" name="address[country]" data-default="{{form.country}}">{{ country_option_tags }}</select>
+									        </div>
+					        			</div>
+										
+										<div id="AddressProvinceContainer_{{form.id}}" class="form-group" style="display:none">
+											<label class="col-sm-2 control-label" for="AddressProvince_{{form.id}}">{{ 'customer.addresses.province' | t }}</label>
+									        <div class="col-sm-4">
+												<select class="form-control address_form" id="AddressProvince_{{form.id}}" name="address[province]" data-default="{{form.province}}"></select>
+									        </div>
+					        			</div>
+
+					        			<div class="form-group">
+											<label class="col-sm-2 control-label" for="AddressZip_{{form.id}}">{{ 'customer.addresses.zip' | t }}</label>
+									        <div class="col-sm-4">
+												<input type="text" id="AddressZip_{{form.id}}" class="address_form form-control" name="address[zip]" value="{{form.zip}}" autocapitalize="characters">
+									        </div>
+											<label class="col-sm-2 control-label"  for="AddressPhone_{{form.id}}">{{ 'customer.addresses.phone' | t }}</label>
+									        <div class="col-sm-4">
+												<input type="tel" id="AddressPhone_{{form.id}}" class="address_form form-control" name="address[phone]" value="{{form.phone}}">
+									        </div>
+					        			</div>
+										
+										<div class="form-group">
+											<div class="col-sm-offset-2">
+												<div class="checkbox">
+													<label>
+														{{ form.set_as_default_checkbox }} {{ 'customer.addresses.set_default' | t }}
+													</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-sm-offset-2">
+												<input type="submit" class="btn btn--black" value="{{ 'customer.addresses.update' | t }}">
+												<a class="btn btn-default" href="#" onclick="Shopify.CustomerAddress.toggleForm({{form.id}}); return false;">{{ 'customer.addresses.cancel' | t }}</a>
+											</div>
+										</div>
+									</div>
+									{% endform %}
+
+								{% endfor %}
+
+								{% if paginate.pages > 1 %}
+								  	<div class="text-center">
+								    	<ul class="pagination">
+										{% if paginate.previous %}
+											<li><a href="{{ paginate.previous.url }}" title="{{ paginate.previous.title }}" data-page="{{ paginate.current_page | minus:1 }}">&laquo;</a></li>
+										{% else %}
+											<li class="disabled" style="display:none;"><span>&laquo;</span></li>
+										{% endif %}
+
+										{% for part in paginate.parts %}
+											{% if part.is_link %}
+												<li>
+													<a href="{{ part.url }}" title="" data-page="{{ part.title }}">{{ part.title }}</a>
+												</li>
+											{% else %}
+												{% if part.title == paginate.current_page %}
+													<li class="active"><span>{{ part.title }}</span></li>
+												{% else %}
+													<li><span>{{ part.title }}</span></li>
+												{% endif %}
+											{% endif %}
+										{% endfor %}
+
+									  	{% if paginate.next %}
+									    	<li><a href="{{ paginate.next.url }}" title="{{ paginate.next.title }}" data-page="{{ paginate.current_page | plus:1 }}">&raquo;</a></li>
+									  	{% else %}
+									    	<li class="disabled" style="display:none;"><span>&raquo;</span></li>
+									  	{% endif %}
+									</ul>
+								  	</div>
+								{% endif %}
+
+							</div> <!-- end #user-addresses -->
+							<div id="user-add-address" class="tab-pane fade">
+								
+
+								{% form 'customer_address', customer.new_address %}
+								<div class="form-horizontal" id="AddAddress">
+									
+									{{ form.errors | default_errors }}
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="AddressFirstNameNew">{{ 'customer.addresses.first_name' | t }}</label>
+								        <div class="col-sm-4">
+											<input type="text" id="AddressFirstNameNew" class="address_form form-control" name="address[first_name]" value="{{form.first_name}}" >
+								        </div>
+				        			</div>
+
+				        			<div class="form-group">
+										<label class="col-sm-2 control-label" for="AddressLastNameNew">{{ 'customer.addresses.last_name' | t }}</label>
+								        <div class="col-sm-4">
+											<input type="text" id="AddressLastNameNew" class="address_form form-control" name="address[last_name]" value="{{form.last_name}}" >
+								        </div>
+				        			</div>
+
+				        			<div class="form-group">
+										<label class="col-sm-2 control-label" for="AddressCompanyNew">{{ 'customer.addresses.company' | t }}</label>
+								        <div class="col-sm-4">
+											<input type="text" id="AddressCompanyNew" class="address_form form-control" name="address[company]" value="{{form.company}}" >
+								        </div>
+				        			</div>
+
+				        			<div class="form-group">
+										<label class="col-sm-2 control-label" for="AddressAddress1New">{{ 'customer.addresses.address1' | t }}</label>
+								        <div class="col-sm-4">
+											<input type="text" id="AddressAddress1New" class="address_form form-control" name="address[address1]" value="{{form.address1}}" >
+								        </div>
+
+										<label class="col-sm-2 control-label" for="AddressAddress2New">{{ 'customer.addresses.address2' | t }}</label>
+								        <div class="col-sm-4">
+											<input type="text" id="AddressAddress2New" class="address_form form-control" name="address[address2]" value="{{form.address2}}" >
+								        </div>
+				        			</div>
+									
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="AddressCityNew">{{ 'customer.addresses.city' | t }}</label>
+								        <div class="col-sm-4">
+											<input type="text" id="AddressCityNew" class="address_form form-control" name="address[city]" value="{{form.city}}" >
+								        </div>
+				        			</div>
+
+				        			<div class="form-group">
+										<label class="col-sm-2 control-label" for="AddressCountryNew">{{ 'customer.addresses.country' | t }}</label>
+								        <div class="col-sm-4">
+											<select class="form-control" id="AddressCountryNew" name="address[country]" data-default="{{form.country}}">{{ country_option_tags }}</select>
+								        </div>
+				        			</div>
+
+				        			<div id="AddressProvinceContainerNew" class="form-group" style="display:none">
+										<label class="col-sm-2 control-label" for="AddressProvinceNew">{{ 'customer.addresses.province' | t }}</label>
+								        <div class="col-sm-4">
+											<select id="AddressProvinceNew" class="address_form form-control" name="address[province]" data-default="{{form.province}}"></select>
+								        </div>
+				        			</div>
+
+				        			<div class="form-group">
+										<label class="col-sm-2 control-label" for="AddressZipNew">{{ 'customer.addresses.zip' | t }}</label>
+								        <div class="col-sm-4">
+											<input type="text" id="AddressZipNew" class="address_form form-control" name="address[zip]" value="{{form.zip}}" autocapitalize="characters">
+								        </div>
+
+										<label class="col-sm-2 control-label" for="AddressPhoneNew">{{ 'customer.addresses.phone' | t }}</label>
+								        <div class="col-sm-4">
+											<input type="tel" id="AddressPhoneNew" class="address_form form-control" name="address[phone]" value="{{form.phone}}">
+								        </div>
+				        			</div>
+
+				        			<div class="form-group">
+										<div class="col-sm-offset-2">
+											<div class="checkbox">
+												<label>
+													{{ form.set_as_default_checkbox }} {{ 'customer.addresses.set_default' | t }}
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="col-sm-offset-2">
+											<input type="submit" class="btn btn--black" value="{{ 'customer.addresses.add' | t }}">
+										</div>
+									</div>
+								</div>
+
+								{% endform %}
+
+							</div>
+						</div>
+					</div>
+						
+				</div>
+			</div>
+
+		</div> <!-- end .site-main -->
+	</div> <!-- end .content-area -->
+</div> <!-- end .main-content -->
+<script>
+
+    // Initialize observers on address selectors
+    new Shopify.CountryProvinceSelector('AddressCountryNew', 'AddressProvinceNew', {
+      hideElement: 'AddressProvinceContainerNew'
+    });
+
+    // Setup province selector on each customer address
+    {% for address in customer.addresses %}
+      new Shopify.CountryProvinceSelector('AddressCountry_{{address.id}}', 'AddressProvince_{{address.id}}', {
+        hideElement: 'AddressProvinceContainer_{{address.id}}'}
+      );
+    {% endfor %}
+
+    // Modified contents of customer_area.js (global asset)
+    Shopify.CustomerAddress = {
+      toggleForm: function(id) {
+        var editEl = document.getElementById('EditAddress_'+id);
+        editEl.style.display = editEl.style.display == 'none' ? '' : 'none';
+        return false;
+      },
+
+      toggleNewForm: function() {
+        var el = document.getElementById('AddAddress');
+        el.style.display = el.style.display == 'none' ? '' : 'none';
+        return false;
+      },
+
+      destroy: function(id, confirm_msg) {
+        if (confirm(confirm_msg || {{ 'customer.addresses.delete_confirm' | t | json }})) {
+          Shopify.postLink('/account/addresses/'+id, {'parameters': {'_method': 'delete'}});
+        }
+      }
+    }
+</script>
+
+{% endpaginate %}

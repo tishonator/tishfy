@@ -1,0 +1,319 @@
+{% assign grid_results = false %}
+{% assign respond_js_secret_key = shop.domain | md5 %}
+{% unless search.terms == respond_js_secret_key %}
+    {% if search.performed %}
+        {% paginate search.results by 8 %}
+            {% if search.results_count == 0 %}
+                {% render 'breadcrumb' %}
+                <div id="main-content" class="main-content search-notfound">
+                    <div class="content-area container">
+                        <h1 class="search-title">{{ 'general.search.no_results_html' | t: terms: search.terms }}</h1>
+
+                        {% render 'search-bar' %}
+                    </div>
+                </div>
+            {% else %}
+                {% render 'breadcrumb' %}
+                <div id="main-content" class="main-content">
+                    <div class="content-area container">
+                        <h1 class="search-title">
+                            Search result for <span>"{{ search.terms }}"</span>
+                        </h1>
+                        <div class="row">
+                            {% for item in search.results %}
+                                {% if item.object_type == 'product' %}
+                                    <div class="col-sm-3">
+                                        {% assign product = item %}  
+                                        {% comment %} 
+                                          require product
+                                        {% endcomment %}
+
+                                        {% assign on_sale = false %}
+                                        {% assign sale_text = 'products.product.sale' | t %}
+                                        {% if product.compare_at_price > product.price %}
+                                            {% assign on_sale = true %}
+                                        {% endif %}
+
+                                        {% assign sold_out = true %}
+                                        {% assign sold_out_text = 'products.product.sold_out' | t %}
+                                        {% if product.available %}
+                                            {% assign sold_out = false %}
+                                        {% endif %}
+
+                                        <div class="product product-block">
+                                          <div class="product-block-inner">
+                                            {% if on_sale %}
+                                              <span class="onsale">Sale!</span>
+                                            {% endif %}
+                                            
+                                            <div class="product-image">
+                                              <a href="{{ product.url }}" title="{{ product.title }}" class="title">
+                                                <div class="image">
+                                                  {% assign image = product.images.first %}
+                                                  {% assign second_image = product.images[1] %}
+                                                  <img src="{{ image.src | product_img_url: 'large'  }}" class="image-effect" alt="{{ image.alt | escape }}">
+                                                  {% if second_image %}
+                                                    <img src="{{ second_image.src | product_img_url: 'large'  }}" class="image-hover" alt="{{ second_image.alt | escape }}">
+                                                  {% endif %}
+                                                </div>
+                                              </a>
+                                              <div class="action-group">
+                                                <a href="#" class="button quickview" data-product-handle="{{ product.handle }}">
+                                                  <i class="fa fa-plus-circle"></i>
+                                                </a>
+                                                <a href="#" class="button btn-cart add_to_cart_button" data-product-id="{{ product.variants[0].id }}">
+                                                  <i class="fa fa-shopping-basket"></i>
+                                                  <span class="cart-text">Add to cart</span>
+                                                </a>
+                                              </div>
+                                            </div>
+                                            <div class="product-meta">
+                                              <h4 class="name">
+                                                <a href="{{ product.url }}" title="{{ product.title }}">
+                                                  {{ product.title }}
+                                                </a>
+                                              </h4>
+                                              <span class="price">
+                                                <span class="amount">{{ product.price | money }}</span>
+                                              </span>
+                                              <div class="category">
+                                                {% for collection in product.collections %}
+                                                  {% unless forloop.last %}
+                                                    <a href="{{ collection.url }}">{{ collection.title }}, </a>
+                                                  {% else %}
+                                                    <a href="{{ collection.url }}">{{ collection.title }}</a>       
+                                                  {% endunless %}
+                                                {% endfor %}
+                                              </div>
+                                            </div>
+                                            
+                                          </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {% assign article = item %}  
+                                    <div class="blog-container clearfix">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                {% if article.image %}
+                                                    <div class="post-thumb">
+                                                        {% assign image_alt = article.title | escape %}
+                                                        {{ article | img_url: '1024x1024' | img_tag: image_alt, 'article__image' | link_to: article.url }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="entry-header">
+                                                    <h2 class="entry-title clearfix">
+                                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                                    </h2>
+                                                    <div class="entry-meta clearfix">
+                                                        <span>By <a href="{{ article.url }}" class="author-title">
+                                                             {{ article.author }}
+                                                        </a> </span>
+                                                        <span> in <a href="{{blog.url}}">{{blog.title}} </a></span>
+                                                        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                                                            <i class="fa fa-clock-o"></i> {{ article.published_at | date: "%b %d, %Y" }}
+                                                        </time>
+                                                        <span><i class="fa fa-comment-o"></i><a href="">{{article.comments_count}} Comment</a> </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="inner">
+                                                    <div class="inner-content clearfix">
+                                                        <div class="entry-content">
+                                                            {% if article.excerpt.size > 0 %}
+                                                                {{ article.excerpt }}
+                                                            {% else %}
+                                                                <p>{{ article.content | strip_html | truncatewords: 100 }}</p>
+                                                            {% endif %}
+                                                            <div class="link-readmore">
+                                                                <a href="{{ article.url }}" class="btn">Read more </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if paginate.pages > 1 %}
+                <div class="container">
+                    <div class="pagination">
+                        <ul class="pagination">
+                        {% if paginate.previous %}
+                          <li><a href="{{ paginate.previous.url }}" title="{{ paginate.previous.title }}" data-page="{{ paginate.current_page | minus:1 }}">&laquo;</a></li>
+                        {% else %}
+                          <li class="disabled" style="display:none;"><span>&laquo;</span></li>
+                        {% endif %}
+
+                        {% for part in paginate.parts %}
+                          {% if part.is_link %}
+                            <li>
+                              <a href="{{ part.url }}" title="" data-page="{{ part.title }}">{{ part.title }}</a>
+                            </li>
+                          {% else %}
+                            {% if part.title == paginate.current_page %}
+                              <li class="active"><span>{{ part.title }}</span></li>
+                            {% else %}
+                              <li><span>{{ part.title }}</span></li>
+                            {% endif %}
+                          {% endif %}
+                        {% endfor %}
+
+                          {% if paginate.next %}
+                            <li><a href="{{ paginate.next.url }}" title="{{ paginate.next.title }}" data-page="{{ paginate.current_page | plus:1 }}">&raquo;</a></li>
+                          {% else %}
+                            <li class="disabled" style="display:none;"><span>&raquo;</span></li>
+                          {% endif %}
+                      </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% endpaginate %}
+    {% else %}
+        <div class="section-header section-header--large search-found container search-found">
+            <h1 class="search-title">{{ 'general.search.title' | t }}</h1>
+             {% render 'search-bar' %}
+        </div>
+       
+    {% endif %}
+{% else %}
+    /*! Respond.js: min/max-width media query polyfill. Remote proxy (c) Scott Jehl. MIT/GPLv2 Lic. j.mp/respondjs  */
+(function(win, doc, undefined){
+  var docElem     = doc.documentElement,
+    proxyURL    = doc.getElementById("respond-proxy").href,
+    redirectURL   = (doc.getElementById("respond-redirect") || location).href,
+    baseElem    = doc.getElementsByTagName("base")[0],
+    urls      = [],
+    refNode;
+
+  function encode(url){
+    return win.encodeURIComponent(url);
+  }
+
+   function fakejax( url, callback ){
+
+    var iframe,
+      AXO;
+
+    // All hail Google http://j.mp/iKMI19
+    // Behold, an iframe proxy without annoying clicky noises.
+    if ( "ActiveXObject" in win ) {
+      AXO = new ActiveXObject( "htmlfile" );
+      AXO.open();
+      AXO.write( '<iframe id="x"></iframe>' );
+      AXO.close();
+      iframe = AXO.getElementById( "x" );
+    } else {
+      iframe = doc.createElement( "iframe" );
+      iframe.style.cssText = "position:absolute;top:-99em";
+      docElem.insertBefore(iframe, docElem.firstElementChild || docElem.firstChild );
+    }
+
+    iframe.src = checkBaseURL(proxyURL) + "?url=" + encode(redirectURL) + "&css=" + encode(checkBaseURL(url));
+
+    function checkFrameName() {
+      var cssText;
+
+      try {
+        cssText = iframe.contentWindow.name;
+      }
+      catch (e) { }
+
+      if (cssText) {
+        // We've got what we need. Stop the iframe from loading further content.
+        iframe.src = "about:blank";
+        iframe.parentNode.removeChild(iframe);
+        iframe = null;
+
+
+        // Per http://j.mp/kn9EPh, not taking any chances. Flushing the ActiveXObject
+        if (AXO) {
+          AXO = null;
+
+          if (win.CollectGarbage) {
+            win.CollectGarbage();
+          }
+        }
+
+        callback(cssText);
+      }
+      else{
+        win.setTimeout(checkFrameName, 100);
+      }
+    }
+
+    win.setTimeout(checkFrameName, 500);
+  }
+
+    // http://stackoverflow.com/a/472729
+  function checkBaseURL(href) {
+        var el = document.createElement('div'),
+        escapedURL = href.split('&').join('&amp;').
+            split('<').join('&lt;').
+            split('"').join('&quot;');
+
+        el.innerHTML = '<a href="' + escapedURL + '">x</a>';
+        return el.firstChild.href;
+  }
+
+  function checkRedirectURL() {
+    // IE6 & IE7 don't build out absolute urls in <link /> attributes.
+    // So respond.proxy.gif remains relative instead of http://example.com/respond.proxy.gif.
+    // This trickery resolves that issue.
+    if (~ !redirectURL.indexOf(location.host)) {
+
+      var fakeLink = doc.createElement("div");
+
+      fakeLink.innerHTML = '<a href="' + redirectURL + '"></a>';
+      docElem.insertBefore(fakeLink, docElem.firstElementChild || docElem.firstChild );
+
+      // Grab the parsed URL from that dummy object
+      redirectURL = fakeLink.firstChild.href;
+
+      // Clean up
+      fakeLink.parentNode.removeChild(fakeLink);
+      fakeLink = null;
+    }
+  }
+
+  function buildUrls(){
+    var links = doc.getElementsByTagName( "link" );
+
+    for( var i = 0, linkl = links.length; i < linkl; i++ ){
+
+      var thislink  = links[i],
+        href    = links[i].href,
+        extreg    = (/^([a-zA-Z:]*\/\/(www\.)?)/).test( href ),
+        ext     = (baseElem && !extreg) || extreg;
+
+      //make sure it's an external stylesheet
+      if( thislink.rel.indexOf( "stylesheet" ) >= 0 && ext ){
+        (function( link ){
+          fakejax( href, function( css ){
+            link.styleSheet.rawCssText = css;
+            respond.update();
+          } );
+        })( thislink );
+      }
+    }
+
+
+  }
+
+  if( !respond.mediaQueriesSupported ){
+    checkRedirectURL();
+    buildUrls();
+  }
+
+})( window, document );
+    {% layout none %}
+{% endunless %}

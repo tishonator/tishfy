@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	{% if settings.display_favicon %}
+		<link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/png" />
+	{% endif %}
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>
+	{{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+	</title>
+
+	{% if page_description %}
+	<meta name="description" content="{{ page_description | escape }}">
+	{% endif %}
+
+	<!-- Social meta ================================================== -->
+	{% render 'social-meta-tags' %}
+
+	<!-- Helpers ================================================== -->
+	<link rel="canonical" href="{{ canonical_url }}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<!-- CSS ================================================== -->
+	{{ 'bootstrap.min.css' | asset_url | stylesheet_tag }}
+	{{ 'tishfy-theme.css' | asset_url | stylesheet_tag }}
+
+	<!-- Header hook for plugins ================================================== -->
+	{{ content_for_header }}
+	
+
+	{% comment %}
+		If you store has customer accounts disabled, you can remove the following JS file
+	{% endcomment %}
+
+	{% if template contains 'customers' %}
+		{{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+        {{ "customer_area.js"  | shopify_asset_url | script_tag }}
+	{% endif %}
+
+	<script type="text/javascript">
+		var moneyFormat = "{{ shop.money_format }}";
+	</script>
+</head>
+
+<body id="{{ page_title | handle }}" class="box-home">
+
+	<div class="page-box">
+
+		<!--====================  header area ====================-->
+        <div class="header-area header-area--default bg-white">
+
+            <!-- Header Bottom Wrap Start -->
+            <header class="header-area   header-sticky">
+                <div class="container-fluid container-fluid--cp-100">
+                    <div class="row">
+                        <div class="col-lg-12 d-none d-md-block">
+                            <div class="top-logo-area">
+                                <div class="logo text-md-center">
+                                    <a href="/" itemprop="url">
+										<img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" itemprop="logo">
+									</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center pt-3 pb-3">
+
+                        <div class="col-lg-3 col-lg-3 col-6">
+                            {% if settings.header_phone != '' %}
+                                <div class="header-right-items content__hidden d-none d-md-block">
+                                    <a href="#" class=""><span class="phone-number font-lg-p"> <i class="icon-telephone"></i> {{settings.header_phone}}</span></a>
+                                </div>
+                            {% endif %}
+                            <div class="logo__hidden text-left">
+                                <a href="/" itemprop="url">
+										<img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" itemprop="logo">
+									</a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-lg-6  d-none d-lg-block">
+                            <!-- navigation menu -->
+                            <div class="header__navigation d-none d-lg-block">
+                            	{% render 'megamenu-layout' %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-lg-3 col-6">
+                            <div class="header-right-side text-right">
+                                <div class="header-right-items">
+                                    <a href="javascript:void(0)" class="search-icon" id="search-overlay-trigger">
+                                        <i class="icon-magnifier"></i>
+                                    </a>
+                                </div>
+                                {% if shop.customer_accounts_enabled %}
+									<div class="header-right-items">
+										<a href="/account"><i class="icon-user"></i></a>
+									</div>
+								{% endif %}
+                                <div class="header-right-items">
+                                    <a href="#miniCart" class=" header-cart minicart-btn toolbar-btn header-icon">
+                                        <i class="icon-bag2"></i>
+                                        <span class="item-counter">{{ cart.item_count }}</span>
+                                    </a>
+                                </div>
+
+                                <div class="header-right-items d-block d-lg-none">
+                                    <a href="#" class="mobile-navigation-icon" id="mobile-menu-trigger">
+                                        <i class="icon-menu"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Header Bottom Wrap End -->
+
+        </div>
+        <!--====================  End of header area  ====================-->
+
+		<div class="site-wrapper-reveal">
+
+			{{ content_for_layout }}
+
+		</div> <!-- .site-wrapper-reveal -->
+
+
+		<!--====================  footer area ====================-->
+        <div class="footer-area-wrapper bg-white">
+            <div class="footer-area section-space--ptb_90">
+                <div class="container-fluid container-fluid--cp-100">
+                    <div class="row footer-widget-wrapper">
+
+                    	{% for i in (1..4) %}
+							{% capture title %}footer_ttl_col_{{ i }}{% endcapture %}
+							{% capture content %}footer_content_col_{{ i }}{% endcapture %}
+							<div class="col-lg-3 col-md-4 col-sm-6 footer-widget">
+								<h6 class="footer-widget__title section-title--one mb-20">{{settings[title]}}</h6>
+								<div class="footer-content">
+									{{settings[content]}}
+								</div>
+							</div>
+						{% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright-area border-top section-space--ptb_30">
+                <div class="container-fluid container-fluid--cp-100">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 order-md-1 order-2">
+                            <span class="copyright-text text-center text-md-left">{{ settings.footer_copyright_text }}</span>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 order-md-2 order-1">
+                            <div class="footer-bottom-social">
+                                <h6 class="title">Follow Us On Social</h6>
+                                <ul class="list footer-social-networks">
+                                    {% if settings.footer_social_facebook != blank %}
+										<li class="item">
+											<a aria-label="Facebook" href="{{ settings.footer_social_facebook }}">
+												<i class="social social_facebook"></i>
+											</a>
+										</li>
+									{% endif %}
+
+									{% if settings.footer_social_twitter != blank %}
+										<li class="item">
+											<a aria-label="Twitter" href="{{ settings.footer_social_twitter }}">
+												<i class="social social_twitter"></i>
+											</a>
+										</li>
+									{% endif %}
+
+									{% if settings.footer_social_linkedin != blank %}
+										<li class="item">
+											<a aria-label="LinkedIn" href="{{ settings.footer_social_linkedin }}">
+												<i class="social social_linkedin"></i>
+											</a>
+										</li>
+									{% endif %}
+
+									{% if settings.footer_social_pinterest != blank %}
+										<li class="item">
+											<a aria-label="Pinterest" href="{{ settings.footer_social_pinterest }}">
+												<i class="social social_pinterest"></i>
+											</a>
+										</li>
+									{% endif %}
+
+									{% if settings.footer_social_instagram != blank %}
+										<li class="item">
+											<a aria-label="Instagram" href="{{ settings.footer_social_instagram }}">
+												<i class="social social_instagram"></i>
+											</a>
+										</li>
+									{% endif %}
+
+									{% if settings.footer_social_youtube != blank %}
+										<li class="item">
+											<a aria-label="YouTube" href="{{ settings.footer_social_youtube }}">
+												<i class="social social_youtube"></i>
+											</a>
+										</li>
+									{% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--====================  End of footer area  ====================-->
+
+
+	</div> <!-- .page-box -->
+
+    <!-- Modal -->
+    <div class="product-modal-box modal fade" id="product-quickview" tabindex="-1" role="dialog">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="icon-cross" aria-hidden="true"></span></button>
+                </div>
+                <div class="modal-body container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-40 mb-40">
+                            <div class="quickview-product-active mr-lg-2 ml-lg-4">
+                            </div>
+                            <!-- Thumbnail Large Image End -->
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-40 mb-40 pr-5">
+                            <div class="product-details-content quickview-content-wrap ">
+
+                                <h5 class="product-title font-weight--reguler mb-10"></h5>
+                                
+                                <h3 class="price"></h3>
+
+                                <div class="quickview-description mt-10">
+                                </div>
+
+                                <form action="/cart/add" method="post"
+                                    enctype="multipart/form-data" id="AddToCartFormQV">
+                                    <div class="selector-wrapper">
+                                    </div>
+
+                                    <div class="quickview-action-wrap mt-30">
+                                        <div class="quickview-cart-box">
+                                            <div class="quickview-quality">
+                                                <div class="cart-plus-minus">
+                                                    <input type="text" id="Quantity" name="quantity" value="1" class="cart-plus-minus-box">
+                                                </div>
+                                            </div>
+
+                                            <div class="quickview-button">
+                                                <div class="quickview-cart button">
+                                                    <button type="submit" name="add" id="AddToCartQV"
+                                                        class="btn--lg btn--black font-weight--reguler text-white cart_add_to_cart_button_qv">
+                                                        <span id="AddToCartTextQV">{{ 'products.product.add_to_cart' | t }}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </form>
+
+                                <div class="product_meta mt-30">
+                                    <div class="sku_wrapper item_meta">
+                                        <span class="label"> SKU: </span>
+                                        <span class="sku"> TODO </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal end -->
+
+
+    <!-- Modal -->
+    <div class="header-login-register-wrapper modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-box-wrapper">
+                    <div class="tishonator-tabs">
+                        <ul class="nav" role="tablist">
+                            <li class="tab__item nav-item active">
+                                <a class="nav-link active" data-toggle="tab" href="#tab_list_06" role="tab">Login</a>
+                            </li>
+                            <li class="tab__item nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab_list_07" role="tab">Our Register</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="tab-content content-modal-box">
+                        <div class="tab-pane fade show active" id="tab_list_06" role="tabpanel">
+                            <form action="#" class="account-form-box">
+                                <h6>Login your account</h6>
+                                <div class="single-input">
+                                    <input type="text" placeholder="Username">
+                                </div>
+                                <div class="single-input">
+                                    <input type="password" placeholder="Password">
+                                </div>
+                                <div class="checkbox-wrap mt-10">
+                                    <label class="label-for-checkbox inline mt-15">
+                                        <input class="input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever"> <span>Remember me</span>
+                                    </label>
+                                    <a href="#" class=" mt-10">Lost your password?</a>
+                                </div>
+                                <div class="button-box mt-25">
+                                    <a href="#" class="btn btn--full btn--black">Log in</a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="tab_list_07" role="tabpanel">
+
+                            <form action="#" class="account-form-box">
+                                <h6>Register An Account</h6>
+                                <div class="single-input">
+                                    <input type="text" placeholder="Username">
+                                </div>
+                                <div class="single-input">
+                                    <input type="text" placeholder="Email address">
+                                </div>
+                                <div class="single-input">
+                                    <input type="password" placeholder="Password">
+                                </div>
+                                <p class="mt-15">Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a href="#" class="privacy-policy-link">privacy policy</a>.</p>
+                                <div class="button-box mt-25">
+                                    <a href="#" class="btn btn--full btn--black">Register</a>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--====================  mobile menu overlay ====================-->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+
+        <div class="mobile-menu-overlay__inner">
+
+            <div class="mobile-menu-close-box text-left">
+                <span class="mobile-navigation-close-icon" id="mobile-menu-close-trigger"> <i class="icon-cross2"></i></span>
+            </div>
+
+
+            <div class="mobile-menu-overlay__body">
+                <nav class="offcanvas-navigation">
+                    <ul>
+                        {% assign mainmenu = settings.megamenu_menu %}
+
+                        {% for lvl1_link in linklists[mainmenu].links %}
+                            {% assign lvl1_link_handle = lvl1_link.handle %}
+                            {% assign lvl2_links = linklists[lvl1_link_handle].links %}
+                            
+                            {% if lvl2_links != blank %}
+                                <li class="has-children">
+                                    <a href="{{ lvl1_link.url }}">{{ lvl1_link.title }}</a>
+                                    <ul class="sub-menu">
+                                        {% for lvl2_link in lvl2_links %}
+                                            {% assign lvl2_link_handle = lvl2_link.handle %}
+                                            {% assign lvl3_links = linklists[lvl2_link_handle].links %}
+                                            <li>
+                                                <a href="{{ lvl2_link.url }}">
+                                                    <span>{{ lvl2_link.title }}</span>
+                                                </a>
+                                            </li>
+                                            {% if lvl3_links != blank %}
+                                                {% for lvl3_link in lvl3_links %}
+                                                    <li>
+                                                        <a href="{{ lvl3_link.url }}">
+                                                            <span>{{ lvl3_link.title }}</span>
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{{ lvl1_link.url }}">{{ lvl1_link.title }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <!--====================  End of mobile menu overlay  ====================-->
+
+
+    <!--  offcanvas Minicart Start -->
+    <div class="offcanvas-minicart_wrapper" id="miniCart">
+        <div class="offcanvas-menu-inner">
+            <div class="close-btn-box">
+                <a href="#" class="btn-close"><i class="icon-cross2"></i></a>
+            </div>
+            <div class="minicart-content">
+            	{% if cart.item_count == 0 %}
+					<p>No product in the cart</p>
+				{% else %}
+					<ul class="minicart-list">
+					{% for line_item in cart.items %}
+						<li class="minicart-product">
+	                        <a class="product-item_remove" href="javascript:void(0)" data-product-id="{{ line_item.variant_id }}"><i class="icon-cross2"></i></a>
+	                        <a href="{{ line_item.url }}" class="product-item_img">
+	                            {{ line_item.image |  img_url: 'small' | img_tag }}
+	                        </a>
+	                        <div class="product-item_content">
+	                            <a class="product-item_title" href="{{ line_item.url }}">{{ line_item.title }}</a>
+	                            <label>Qty : <span>{{ line_item.quantity }} × </span></label>
+	                            <label class="product-item_quantity">{{ line_item.price | money_with_currency }}</label>
+	                        </div>
+	                    </li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+            </div>
+                <div class="minicart-item_total {% if cart.item_count == 0 %}d-none{% endif %}">
+                <span class="font-weight--reguler">Subtotal:</span>
+                <span class="amount font-weight--reguler">{{ cart.total_price | money_with_currency }}</span>
+            </div>
+            <div class="minicart-btn_area {% if cart.item_count == 0 %}d-none{% endif %}">
+                <a href="/cart" class="btn btn--full btn--border_1">View cart</a>
+            </div>
+            <div class="minicart-btn_area {% if cart.item_count == 0 %}d-none{% endif %}">
+                <a href="/checkout" class="btn btn--full btn--black">Checkout</a>
+            </div>
+        </div>
+    </div>
+    <!--  offcanvas Minicart End -->
+
+
+    <!--====================  search overlay ====================-->
+    <div class="search-overlay" id="search-overlay">
+
+        <div class="search-overlay__header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-8">
+                        <div class="search-title">
+                            <h4 class="font-weight--normal">Search</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ml-auto col-4">
+                        <!-- search content -->
+                        <div class="search-content text-right">
+                            <span class="mobile-navigation-close-icon" id="search-close-trigger"><i class="icon-cross"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-overlay__inner">
+            <div class="search-overlay__body">
+                <div class="search-overlay__form">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-9 ml-auto mr-auto">
+                                <form action="/search" method="get" role="search">
+                                    <div class="product-cats section-space--mb_60 text-center">
+                                        {% assign mainmenu = settings.megamenu_menu %}
+                                        {% for lvl1_link in linklists[mainmenu].links %}
+                                            <a href="{{ lvl1_link.url }}" class="cat-link">
+                                                <span>{{ lvl1_link.title }}</span>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="search-fields">
+                                        <input type="text" name="q" value="{{ search.terms | escape }}" aria-label="{{ 'general.search.placeholder' | t }}" placeholder="{{ 'general.search.placeholder' | t }}">
+                                        <button class="submit-button"><i class="icon-magnifier"></i></button>
+                                    </div>
+                                    <input type="hidden" name="type" value="product">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--====================  End of search overlay  ====================-->
+
+
+	<!--====================  scroll top ====================-->
+    <a href="#" class="scroll-top" id="scroll-top">
+        <i class="arrow-top icon-arrow-up"></i>
+        <i class="arrow-bottom icon-arrow-up"></i>
+    </a>
+    <!--====================  End of scroll top  ====================-->
+
+    {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+	{{ 'tishfy-theme.js' | asset_url | script_tag }}
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+{% render 'breadcrumb' %}
+
+<div class="product-wrapper section-space--ptb_30">
+    <div class="container">
+		<div class="row">
+
+{% assign products_per_row = settings.product_collection_products_per_row %}
+{% assign rows = settings.product_collection_number_of_rows %}
+{% assign total_products = products_per_row | times: rows %}
+
+{% if settings.display_product_collection_sidebar %}
+	{% assign sidebar_class = 'col-md-3 refinements-sidebar' %}
+    {% assign main_class = 'col-md-9 site-main is-main-right-sidebar' %}
+{% else %}
+	{% assign sidebar_class = 'none' %}
+    {% assign main_class = 'col-xs-12 site-main is-main-no-sidebar' %}
+{% endif %}
+
+{% case products_per_row %}
+  	{% when '2' %}
+    	{% assign grid_item_width = 'col-sm-6' %}
+  	{% when '3' %}
+    	{% assign grid_item_width = 'col-sm-4' %}
+  	{% when '4' %}
+    	{% assign grid_item_width = 'col-sm-3' %}
+  	{% when '5' %}
+    	{% assign grid_item_width = 'col-sm-20' %}
+{% endcase %}
+
+{% paginate collection.products by total_products %}
+				
+	<div class="{{ main_class }}">
+		{% if collection.description != blank %}
+			<div class="rte rte--header">
+				{{ collection.description }}
+			</div>
+		{% endif %}
+
+		<div class="catalog-ordering clearfix">
+			<div class="form-shorting pull-right">
+				<label for="SortBy" class="label-products-sort-by">
+					<select class="form-control" name="SortBy" id="SortBy">
+						<option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+						<option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+						<option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
+						<option value="title-descending">{{ 'collections.sorting.za' | t }}</option>
+						<option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+						<option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+						<option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
+						<option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>
+					</select>
+				</label>
+			</div>
+
+			<script>
+				var sortOrder = '{{ collection.sort_by | default: collection.default_sort_by }}';
+			</script>
+		</div> <!-- End .catalog-ordering -->
+
+		{% assign productIndex = 1 %}
+
+		<div class="products">
+			<div class="row product-column-{{ products_per_row }}">
+				{% for product in collection.products %}
+					<div class="{{ grid_item_width }} product-container" data-price="{{ product.price | money_without_currency }}">
+						<!-- Single Product Item Start -->
+	                    <div class="single-product-item text-center">
+	                    	{% comment %} 
+								require product
+							{% endcomment %}
+
+							{% assign on_sale = false %}
+							{% assign sale_text = 'products.product.sale' | t %}
+							{% if product.compare_at_price > product.price %}
+							  	{% assign on_sale = true %}
+							{% endif %}
+
+							{% assign sold_out = true %}
+							{% assign sold_out_text = 'products.product.sold_out' | t %}
+							{% if product.available %}
+							  	{% assign sold_out = false %}
+							{% endif %}
+	                        <div class="products-images">
+	                            <a href="{{ product.url }}" title="{{ product.title }}" class="product-thumbnail">
+	                            	{% assign image = product.images.first %}
+	                                <img src="{{ image.src | product_img_url: 'large'  }}"
+	                                	class="img-fluid" alt="{{ image.alt | escape }}" />
+
+	                                {% if sold_out %}
+									  	<span class="ribbon out-of-stock">
+			                                Out Of Stock
+			                            </span>
+									{% endif %}
+
+									{% if on_sale %}
+									  	<span class="ribbon onsale">
+			                                On Sale
+			                            </span>
+									{% endif %}
+	                            </a>
+	                            <div class="product-actions">
+									<a href="#" class="button quickview"
+										data-product-handle="{{ product.handle }}"
+										data-toggle="modal">
+										<i class="p-icon icon-plus"></i><span class="tool-tip">Quick View</span>
+									</a>
+									<a href="#" class="button btn-cart add_to_cart_button" data-product-id="{{ product.variants[0].id }}">
+										<i class="p-icon icon-bag2"></i> <span class="tool-tip">Add to cart</span>
+									</a>
+								</div>
+	                        </div>
+	                        <div class="product-content">
+	                            <h6 class="prodect-title">
+	                            	<a href="{{ product.url }}" title="{{ product.title }}">
+										{{ product.title }}
+									</a>
+	                            </h6>
+	                            <div class="prodect-price">
+	                                {{ product.price | money }}
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <!-- Single Product Item End -->
+                    </div>
+					{% assign index_modulo = productIndex | modulo: products_per_row %}
+					{% if index_modulo == 0 %}
+						<div class="clearfix"></div>
+					{% endif %}
+					{% assign productIndex = productIndex | plus: 1 %}
+
+				{% else %}
+					<div class="col-sm-12">
+			        	<p><em>{{ 'collections.general.no_matches' | t }}</em></p>
+			      	</div>
+				{% endfor %}
+			</div>
+			{% if paginate.pages > 1 %}
+			  	<nav class="paging mt-5">
+			    	<ul class="pagination">
+						{% if paginate.previous %}
+							<li><a href="{{ paginate.previous.url }}" title="{{ paginate.previous.title }}" data-page="{{ paginate.current_page | minus:1 }}">&laquo;</a></li>
+						{% else %}
+							<li class="disabled" style="display:none;"><span>&laquo;</span></li>
+						{% endif %}
+
+						{% for part in paginate.parts %}
+							{% if part.is_link %}
+								<li>
+									<a href="{{ part.url }}" title="" data-page="{{ part.title }}">{{ part.title }}</a>
+								</li>
+							{% else %}
+								{% if part.title == paginate.current_page %}
+									<li class="active"><span>{{ part.title }}</span></li>
+								{% else %}
+									<li><span>{{ part.title }}</span></li>
+								{% endif %}
+							{% endif %}
+						{% endfor %}
+
+					  	{% if paginate.next %}
+					    	<li><a href="{{ paginate.next.url }}" title="{{ paginate.next.title }}" data-page="{{ paginate.current_page | plus:1 }}">&raquo;</a></li>
+					  	{% else %}
+					    	<li class="disabled" style="display:none;"><span>&raquo;</span></li>
+					  	{% endif %}
+					</ul>
+			    </nav>
+			{% endif %}
+		</div> <!-- end .products -->
+	</div>
+	{% if settings.display_product_collection_sidebar %}
+		<div class="{{ sidebar_class }}">
+			{% render 'refinements-sidebar' %}
+		</div>
+	{% endif %}
+
+{% endpaginate %}
+
+		</div><!-- .row -->
+	</div><!-- .container -->
+</div><!-- .product-wrapper section-space--ptb_120 -->

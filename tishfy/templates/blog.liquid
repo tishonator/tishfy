@@ -1,0 +1,93 @@
+{% render 'breadcrumb' %}
+
+{% paginate blog.articles by 9 %}
+
+	<!-- Blog Page Area Start -->
+	<div class="blog-page-wrapper section-space--pt_60 section-space--pb_120">
+	    <div class="container">
+			<div class="masonry-activation ">
+	        	<div class="row clearfix mesonry-list">
+	            	{% for article in blog.articles %}
+	            		<div class="col-lg-4 col-md-6 col-sm-6 col-12 masonary-item">
+	                        <!-- Single Blog Item Start -->
+	                        <div class="single-blog-item mt-40">
+	                            <div class="blog-thumbnail-box">
+	                                <a href="{{ article.url }}" class="thumbnail">
+	                                	{% if article.image %}
+											<div class="post-thumb">
+								            	{% assign image_alt = article.title | escape %}
+								            	{{ article | img_url: '1024x1024' | img_tag: image_alt, 'article__image' | link_to: article.url }}
+								        	</div>
+							      		{% endif %}
+	                                </a>
+	                            </div>
+	                            <div class="blog-contents">
+	                                <div class="meta-tag-box mb-10">
+	                                    <div class="meta date"><span>{{ article.published_at | date: "%B %d, %Y" }}</span></div>
+	                                    <div class="meta author"><span>
+	                                    <a href="{{ article.user.homepage }} ">{{ article.author }}</a></span></div>
+
+	                                    {% if article.tags %}
+		                                    <div class="meta cat">
+			                                    {% for tag in article.tags %}
+		                                    		<span>
+												    {{ tag }}
+												    </span>
+												{% endfor %}
+											</div>
+										{% endif %}
+	                                </div>
+	                                <h6 class="blog-title-two">
+	                                	<a href="{{ article.url }}">
+	                                		{{ article.title }}
+	                                	</a>
+	                                </h6>
+	                                <div class="button-box mt-40">
+	                                    <a href="{{ article.url }}" class="btn btn--sm btn--border_1"> Read more </a>
+	                                </div>
+
+	                            </div>
+	                        </div><!-- Single Blog Item End -->
+	                    </div>
+					{% endfor %}
+	            </div>
+	        </div>
+
+	        {% if paginate.pages > 1 %}
+			  	<nav class="paging mt-5">
+			    	<ul class="pagination">
+					{% if paginate.previous %}
+						<li><a href="{{ paginate.previous.url }}" title="{{ paginate.previous.title }}" data-page="{{ paginate.current_page | minus:1 }}">&laquo;</a></li>
+					{% else %}
+						<li class="disabled" style="display:none;"><span>&laquo;</span></li>
+					{% endif %}
+
+					{% for part in paginate.parts %}
+						{% if part.is_link %}
+							<li>
+								<a href="{{ part.url }}" title="" data-page="{{ part.title }}">{{ part.title }}</a>
+							</li>
+						{% else %}
+							{% if part.title == paginate.current_page %}
+								<li class="active"><span>{{ part.title }}</span></li>
+							{% else %}
+								<li><span>{{ part.title }}</span></li>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+
+				  	{% if paginate.next %}
+				    	<li><a href="{{ paginate.next.url }}" title="{{ paginate.next.title }}" data-page="{{ paginate.current_page | plus:1 }}">&raquo;</a></li>
+				  	{% else %}
+				    	<li class="disabled" style="display:none;"><span>&raquo;</span></li>
+				  	{% endif %}
+				</ul>
+			    </nav>
+			{% endif %}
+
+	    </div>
+	</div>
+	<!-- Blog Page Area End -->
+
+
+{% endpaginate %}

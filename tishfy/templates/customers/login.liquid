@@ -1,0 +1,132 @@
+{% render 'breadcrumb' %}
+
+<div id="main-content" class="section-space--pt_60 border-bottom">
+	<div class="content-area container">
+		<div class="site-main">
+
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<div id="CustomerLoginForm" class="user-form form-horizontal">
+		        		{% form 'customer_login' %}
+		        			{% if form.errors | default_errors %}
+			        			<div class="alert alert-danger hidden">
+			        				{{ form.errors | default_errors }}
+			        			</div>
+		        			{% endif %}
+		        			<div class="form-group">
+		        				<label for="CustomerEmail" class="col-sm-3 control-label">{{ 'customer.login.email' | t }}</label>
+						        <div class="col-sm-8">
+						        	<input type="email" name="customer[email]" id="CustomerEmail" placeholder="{{ 'customer.login.email' | t }}" class="form-control{% if form.errors contains "email" %} error{% endif %}"   autofocus>
+						        </div>
+		        			</div>
+							{% if form.password_needed %}
+		        			<div class="form-group">
+		        				<label for="CustomerPassword" class="col-sm-3 control-label">{{ 'customer.login.password' | t }}</label>
+						        <div class="col-sm-8">
+						        	<input type="password" name="customer[password]" id="CustomerPassword" placeholder="{{ 'customer.login.password' | t }}" class="form-control{% if form.errors contains "password" %} error{% endif %}">
+						        </div>
+		        			</div>
+		        			<div class="form-group">
+								<div class="col-sm-offset-3 col-sm-8">
+									<a href="#" onclick="showRecoverPasswordForm();return false;">{{ 'customer.login.forgot_password' | t }}</a>
+									{% if shop.customer_accounts_optional %}
+										<br>
+						            	{{ 'layout.customer.create_account' | t | customer_register_link }}
+							        {% endif %} 
+								</div>
+							</div>
+		        			{% endif %}
+		        			
+							<div class="form-group">
+								<div class="col-sm-offset-3 col-sm-8">
+									<input type="submit" class="btn btn--full btn--black" value="{{ 'customer.login.sign_in' | t }}">
+									<a class="btn btn-default" href="{{ shop.url }}">{{ 'customer.login.cancel' | t }}</a>
+								</div>
+							</div>
+		        		{% endform %}
+		        	</div>
+
+					<div id="RecoverPasswordForm" class="user-form form-horizontal" style="display: none;">
+
+						<div class="text-center heading">
+							<h2 class="section-header__title">{{ 'customer.recover_password.title' | t }}</h2>
+							<p>{{ 'customer.recover_password.subtext' | t }}</p>
+						</div>
+
+						{% form 'recover_customer_password' %}
+							{% if form.errors | default_errors %}
+								<div class="alert alert-danger hidden">
+									{{ form.errors | default_errors }}
+								</div>
+							{% endif %}
+
+							{% if form.posted_successfully? %}
+								<div class="alert alert-success form-success" id="ResetSuccess">
+							      	{{ 'customer.recover_password.success' | t }}
+							    </div>
+							{% endif %}
+							<div class="form-group">
+								<label for="RecoverEmail" class="col-sm-3 control-label">{{ 'customer.recover_password.email' | t }}</label>
+						        <div class="col-sm-8">
+									<input type="email" class="form-control" value="" name="email" id="RecoverEmail" placeholder="{{ 'customer.recover_password.email' | t }}"  >
+						        </div>
+		        			</div>
+
+		        			<div class="form-group">
+								<div class="col-sm-offset-3 col-sm-8">
+									<input type="submit" class="btn btn--full btn--black" value="{{ 'customer.recover_password.submit' | t }}">
+									<a class="btn btn-default" href="#" onclick="hideRecoverPasswordForm();return false;">{{ 'customer.recover_password.cancel' | t }}</a>
+								</div>
+							</div>
+
+						{% endform %}
+					</div>
+
+					{% if shop.checkout.guest_login %}
+						<hr>
+
+						<h2>{{ 'customer.login.guest_title' | t }}</h2>
+
+						{% form 'guest_login' %}
+							<input type="submit" class="btn" value="{{ 'customer.login.guest_continue' | t }}">
+						{% endform %}
+					{% endif %}
+
+				</div>
+			</div>
+        	
+
+		</div> <!-- end .site-main -->
+	</div> <!-- end .content-area -->
+</div> <!-- end .main-content -->
+
+<script>
+
+	jQuery(document).ready(function($) {
+		var formlogin = $('#CustomerLoginForm');
+		var formforgotpass = $('#RecoverPasswordForm');
+		if(formlogin.find('.alert>div').hasClass('errors')){
+			$(formlogin).find('.alert').removeClass('hidden');
+		}
+		if(formforgotpass.find('.alert>div').hasClass('errors')){
+			$(formforgotpass).find('.alert').removeClass('hidden');
+		}
+	});
+	/*
+	Show/hide the recover password form when requested.
+	*/
+	function showRecoverPasswordForm() {
+		document.getElementById('RecoverPasswordForm').style.display = 'block';
+		document.getElementById('CustomerLoginForm').style.display='none';
+	}
+
+	function hideRecoverPasswordForm() {
+		document.getElementById('RecoverPasswordForm').style.display = 'none';
+		document.getElementById('CustomerLoginForm').style.display = 'block';
+	}
+
+	// Allow deep linking to the recover password form
+	if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+
+	
+</script>

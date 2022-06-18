@@ -1,0 +1,282 @@
+{% assign number_of_comments = article.comments_count %}
+
+{% if comment and comment.created_at %}
+  {% assign number_of_comments = article.comments_count | plus: 1 %}
+{% endif %}
+
+{% render 'breadcrumb' %}
+
+{% paginate article.comments by 5 %}
+
+	<!-- Blog Page Area Start -->
+    <div class="blog-page-wrapper section-space--pt_30 section-space--pb_120">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-9 col-md-8">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- Single Blog Item Start -->
+                            <div class="single-blog-item">
+                                <div class="blog-thumbnail-box">
+                                    {% if article.image %}
+                                        {% assign image_alt = article.title | escape %}
+                                		{{ article | img_url: '1024x1024' | img_tag: image_alt, 'article__image' | link_to: article.url }}
+                                    {% endif %}
+                                </div>
+                                <div class="blog-contents">
+                                    <div class="meta-tag-box">
+                                        <div class="meta date"><span>{{ article.published_at | date: "%B %d, %Y" }}</span></div>
+	                                    <div class="meta author"><span>
+	                                    <a href="{{ article.user.homepage }} ">{{ article.author }}</a></span></div>
+
+	                                    {% for tag in article.tags %}
+	                                		<div class="meta cat"><span>
+										    {{ tag }}
+										    </span></div>
+										{% endfor %}
+                                    </div>
+
+                                    {{ article.content }}
+
+                                    <div class="row align-items-center">
+                                        <div class="col-12">
+                                            <div class="blog-post-social-networks mt-20">
+                                                <h6 class="title">Share this story on :</h6>
+                                                <ul class="list">
+                                                    <li class="item item-facebook">
+                                                        <div id="fb-root"></div>
+													  	<script>(function(d, s, id) {
+													    		var js, fjs = d.getElementsByTagName(s)[0];
+													    		if (d.getElementById(id)) return;
+													    		js = d.createElement(s); js.id = id;
+													    		js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12";
+													    		fjs.parentNode.insertBefore(js, fjs);
+													  		}(document, 'script', 'facebook-jssdk'));
+													  	</script>
+													  	<div class="fb-share-button" 
+														    data-href="{{ permalinkURL }}" 
+														    data-layout="button_count">
+														  </div>
+                                                    </li>
+                                                    <li class="item item-twitter">
+                                                        <script>window.twttr = (function(d, s, id) {
+															  var js, fjs = d.getElementsByTagName(s)[0],
+															    t = window.twttr || {};
+															  if (d.getElementById(id)) return t;
+															  js = d.createElement(s);
+															  js.id = id;
+															  js.src = "https://platform.twitter.com/widgets.js";
+															  fjs.parentNode.insertBefore(js, fjs);
+
+															  t._e = [];
+															  t.ready = function(f) {
+															    t._e.push(f);
+															  };
+
+															  return t;
+															}(document, "script", "twitter-wjs"));
+														</script>
+														<a class="twitter-share-button"
+														  href="https://twitter.com/intent/tweet">
+														Tweet</a>
+                                                    </li>
+                                                    <li class="item item-linkedin">
+                                                        <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+			<script type="IN/Share"></script>
+                                                    </li>
+                                                    {% if product.featured_image or article.image %}
+														<li class="item item-pinterest" id="pin-save-button">
+															<script
+															    type="text/javascript"
+															    async defer
+															    src="//assets.pinterest.com/js/pinit.js"></script>
+															<a href="https://www.pinterest.com/pin/create/button/" data-pin-do="buttonBookmark"></a>
+														</li>
+													{% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+								    {% if blog.comments_enabled? %}
+								    	<div class="comments-area comments-reply-area section-space--mt_60">
+								    		<div class="row">
+				                                {% if number_of_comments > 0 %}
+				                                    <div id="comments" class="commentlists col-lg-12">
+				                                        
+				                                            {% assign comment_heading = 'Comment' %}
+				                                            {% if number_of_comments > 1 %}
+				                                                {% assign comment_heading = 'Comments' %}
+				                                            {% endif %}
+				                                            <h3 class="heading">{{ number_of_comments }} {{ comment_heading }}</h3>
+				                                            
+				                                        
+				                                        {% if comment and comment.created_at %}
+				                                        <p class="note form-success">
+				                                          {% if blog.moderated? %}
+				                                            {{ 'blogs.comments.success_moderated' | t }}
+				                                          {% else %}
+				                                            {{ 'blogs.comments.success' | t }}
+				                                          {% endif %}
+				                                        </p>
+				                                        {% endif %}
+				                                        
+				                                        <ol class="commentlists list-unstyled">
+				                                            {% if comment and comment.created_at %}
+				                                            <li id="{{ comment.id }}" class="comment first{% if article.comments_count == 0 %} last{% endif %}">
+				                                                <div class="the-comment clearfix">
+				                                                    <div class="comment-meta text-center pull-left">
+				                                                        <div class="avatar">
+				                                                            <img src="http://www.gravatar.com/avatar/{{ comment.email | md5 }}?s=85" />
+				                                                        </div>      
+				                                                    </div>
+				                                                    <div class="comment-box">
+				                                                        <span class="title">{{ comment.author }}</span>
+				                                                        <time>{{ comment.created_at | date: "%b %d, %Y" }}</time>
+				                                                        <div class="comment-text">
+				                                                            {{ comment.content }}
+				                                                        </div>
+				                                                    </div>
+				                                                </div>
+				                                            </li>
+				                                            {% endif %}
+				                                            {% for comment in article.comments %}
+				                                            <li id="{{ comment.id }}" class="comment{% unless number_of_comments > article.comments_count %}{% if forloop.first %} first{% endif %}{% endunless %}{% if forloop.last %} last {% endif %}">
+				                                                <div class="the-comment clearfix">
+				                                                    <div class="comment-meta text-center pull-left">
+				                                                        <div class="avatar">
+				                                                            <img src="http://www.gravatar.com/avatar/{{ comment.email | md5 }}?s=85" />
+				                                                        </div>      
+				                                                    </div>
+				                                                    <div class="comment-box">
+				                                                        <span class="title">{{ comment.author }}</span>
+				                                                        <time>{{ comment.created_at | date: "%b %d, %Y" }}</time>
+				                                                        <div class="comment-text">
+				                                                            {{ comment.content }}
+				                                                        </div>
+				                                                    </div>
+				                                                </div>
+				                                            </li>
+				                                            {% endfor %}
+				                                        </ol>
+
+				                                        {% if paginate.pages > 1 %}
+				                                            <div class="text-center">
+				                                                <ul class="pagination">
+				                                                {% if paginate.previous %}
+				                                                    <li><a href="{{ paginate.previous.url }}" title="{{ paginate.previous.title }}" data-page="{{ paginate.current_page | minus:1 }}">&laquo;</a></li>
+				                                                {% else %}
+				                                                    <li class="disabled" style="display:none;"><span>&laquo;</span></li>
+				                                                {% endif %}
+
+				                                                {% for part in paginate.parts %}
+				                                                    {% if part.is_link %}
+				                                                        <li>
+				                                                            <a href="{{ part.url }}" title="" data-page="{{ part.title }}">{{ part.title }}</a>
+				                                                        </li>
+				                                                    {% else %}
+				                                                        {% if part.title == paginate.current_page %}
+				                                                            <li class="active"><span>{{ part.title }}</span></li>
+				                                                        {% else %}
+				                                                            <li><span>{{ part.title }}</span></li>
+				                                                        {% endif %}
+				                                                    {% endif %}
+				                                                {% endfor %}
+
+				                                                {% if paginate.next %}
+				                                                    <li><a href="{{ paginate.next.url }}" title="{{ paginate.next.title }}" data-page="{{ paginate.current_page | plus:1 }}">&raquo;</a></li>
+				                                                {% else %}
+				                                                    <li class="disabled" style="display:none;"><span>&raquo;</span></li>
+				                                                {% endif %}
+				                                            </ul>
+				                                            </div>
+				                                        {% endif %}
+
+
+				                                    </div>
+				                                {% endif %}
+				                                
+				                                {% form 'new_comment', article %}
+
+				                                	<div class="col-lg-12">
+
+					                                    <h4 class="heading mb-30">{{ 'blogs.comments.title' | t }}</h4>
+
+					                                    {% if blog.moderated? %}
+					                                        <p><small>{{ 'blogs.comments.moderated' | t }}</small></p>
+					                                    {% endif %}
+
+					                                    {{ form.errors | default_errors }}
+
+				                                    </div>
+
+				                                    <div class="comment-form col-lg-12">
+				                                        
+				                                            <div class="comment-input-12">
+				                                                <div class="form-group">
+				                                                    <input class="form-control{% if form.errors contains "author" %} error{% endif %}" type="text" name="comment[author]" placeholder="{{ 'blogs.comments.name' | t }}" id="CommentAuthor" value="{{ form.author }}" >
+				                                                </div>
+				                                            </div>
+				                                            <div class="comment-input-12">
+				                                                <div class="form-group">
+				                                                    <input class="form-control {% if form.errors contains "email" %} error{% endif %}" type="email" name="comment[email]" placeholder="{{ 'blogs.comments.email' | t }}" id="CommentEmail" value="{{ form.email }}"  >
+				                                                </div>
+				                                            </div>
+				                                        
+				                                        <div class="comment-input-12">
+					                                        <div class="form-group">
+					                                            <textarea class="form-control {% if form.errors contains "body" %} error{% endif %}" name="comment[body]" id="CommentBody" rows="8" placeholder="{{ 'blogs.comments.message' | t }}">{{ form.body }}</textarea>
+					                                        </div>
+				                                        </div>
+				                                        <div class="form-submit comment-form-submit">
+				                                            <input type="submit" class="button submit comment-submit btn--md" value="{{ 'blogs.comments.post' | t }}">
+				                                        </div>
+				                                    </div>
+
+				                                {% endform %}
+				                            </div>
+				                        </div>
+		                            {% endif %}
+                                </div>
+                            </div><!-- Single Blog Item End -->
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <div class="blog-widget widget-blog-categories tablet-mt__60 small-mt__60">
+                    	<form action="/search" method="get" class="searchform clearfix" role="search">
+							<div class="input-group search-inner blog-search">
+						    	<input type="search" name="q" value="{{ search.terms | escape }}" aria-label="{{ 'general.search.placeholder' | t }}" class="form-control" placeholder="{{ 'general.search.placeholder' | t }}">
+								<input type="hidden" name="type" value="article">
+								<button class="submit-button"><i class="icon-magnifier"></i></button>
+							</div><!-- /input-group -->
+						</form>
+                    </div>
+                    <div class="blog-widget widget-blog-recent-post mt-40">
+                        <h6 class="mb-20">{{ 'blogs.sidebar.recent_articles' | t }}</h6>
+                        <ul class="widget-nav-list">
+                        	{% for article in blogs[blog.handle].articles limit:5 %}
+                        			<li><a href="{{ article.url }}">{{ article.title }} <span class="post-date">{{ article.published_at | date: format: 'month_day_year' }}</span></a> </li>
+                        	{% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="blog-widget widget-blog-tag mt-40">
+                        <h6 class="mb-20">Tags</h6>
+                        <div class="blog-tagcloud">
+                        	{% for tag in blog.all_tags %}
+								{{ tag | link_to_tag: tag }}
+							{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Blog Page Area End -->
+
+{% endpaginate %}

@@ -1,0 +1,241 @@
+{% render 'breadcrumb' %}
+
+
+<div class="single-product-wrap section-space--pt_60 border-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
+                <!-- Product Details Left -->
+                <div class="product-details-left">
+                    <div class="product-details-images-2 slider-lg-image-2">
+                    	{% for image in product.images %}
+                    		<div class="easyzoom-style">
+	                            <div class="easyzoom easyzoom--overlay">
+	                                <a href="{{ image.src | img_url: '1024x1024' }}" class="poppu-img">
+	                                    <img src="{{ image.src | img_url: '1024x1024' }}" alt="{{ image.alt | escape }}" class="img-fluid" />
+	                                </a>
+	                            </div>
+	                        </div>
+		                {% endfor %}
+                    </div>
+                    <div class="product-details-thumbs-2 slider-thumbs-2">
+                    	{% for image in product.images %}
+                    		<div class="sm-image">
+                    			<img src="{{ image.src | img_url: 'small' }}" alt="{{ image.alt | escape }}" />
+                    		</div>
+		                {% endfor %}
+                    </div>
+                </div>
+                <!--// Product Details Left -->
+            </div>
+            <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+                <div class="product-details-content ">
+
+                    <h5 class="font-weight--reguler mb-10">{{ product.title }}</h5>
+
+                    <h3 class="price">
+                    	{% if product.compare_at_price > product.price %}
+			              	<del id="ComparePrice" class="product-single__sale-price">
+			                	<span class="amount">{{ product.compare_at_price_max | money }}</span>
+			              	</del>
+			            {% endif %}
+			            <span id="ProductPrice" class="product-single__price">
+			              	<span class="amount price-new" itemprop="price">{{ product.price | money }}</span>
+			            </span>
+                    </h3>
+
+                    <div class="quickview-peragraph mt-10">
+                        <p>{{ product.description | strip_html | truncatewords: 60 }}</p>
+                    </div>
+
+
+					<form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm">
+						<select name="id" id="productSelect" class="product-single__variants">
+						{% for variant in product.variants %}
+							{% if variant.available %}
+								<option data-sku="{{ variant.sku }}" value="{{ variant.id }}"
+									{% if variant.option1 %}
+										data-option1="{{ variant.option1 }}"
+									{% endif %}
+									{% if variant.option2 %}
+										data-option2="{{ variant.option2 }}"
+									{% endif %}
+									{% if variant.option3 %}
+										data-option3="{{ variant.option3 }}"
+									{% endif %}>
+									{{ variant.title }} - {{ variant.price | money_with_currency }}
+								</option>
+							{% else %}
+								<option disabled="disabled">
+									{{ variant.title }} - {{ 'products.product.sold_out' | t }}
+								</option>
+							{% endif %}
+						{% endfor %}
+						</select>
+						<div class="product-options mt-40">
+							{% for product_option in product.options_with_values %}
+							  <label for="product-option{{ product_option.position }}"
+							  	class="label-product-option-select">
+							    {{ product_option.name }}
+							    <select id="product-option{{ product_option.position }}" name="product-option{{ product_option.position }}">
+							      {% for value in product_option.values %}
+							        <option {% if product_option.selected_value == value %}selected{% endif %}>
+							          {{ value }}
+							        </option>
+							      {% endfor %}
+							    </select>
+							  </label>
+							{% endfor %}
+						</div>
+						<div class="quickview-action-wrap mt-30">
+                            <div class="quickview-cart-box">
+                                <div class="quickview-quality">
+                                    <div class="cart-plus-minus">
+                                    	<input type="text" id="Quantity" name="quantity" value="1" class="cart-plus-minus-box">
+                                    </div>
+                                </div>
+
+                                <div class="quickview-button">
+                                    <div class="quickview-cart button">
+                                    	<button type="submit" name="add" id="AddToCart"
+                                    		class="btn--lg btn--black font-weight--reguler text-white cart_add_to_cart_button">
+											<span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
+										</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					</form>
+
+					<div class="product_meta mt-30">
+                        <div class="sku_wrapper item_meta">
+                            <span class="label"> SKU: </span>
+                            {%- assign current_variant = product.selected_or_first_available_variant -%}
+                            <span class="sku"> {{ current_variant.sku }} </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<div class="row">
+            <div class="col-12 mt-30">
+            	<h4>Description</h4>
+            	<div class="product_details_tab_content tab-content">
+                    <div class="product_tab_content tab-pane active" id="description" role="tabpanel">
+                        <div class="product_description_wrap">
+                            <div class="product-details-wrap">
+                                <div class="order-md-1 order-2">
+                                    <div class="details">
+                                        {{ product.description }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product_tab_content tab-pane" id="reviews" role="tabpanel">
+
+                    <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+                    
+                </div>
+            </div>
+        </div>
+
+        {% assign number_of_products = 8 %}
+		{% assign number_of_products_to_fetch = number_of_products | plus: 1 %}
+
+		{% if collection == null or collection.handle == 'frontpage' or collection.handle == 'all' %}
+		  	{% assign found_a_collection = false %}
+		  	{% for c in product.collections %}
+		    	{% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
+		      		{% assign found_a_collection = true %}
+		      		{% assign collection = c %}
+		    	{% endif %}
+		  	{% endfor %}
+		{% endif %}
+
+		{% if collection and collection.products_count > 1 %}
+			<div class="related-products section-space--ptb_90">
+	            <div class="row">
+	                <div class="col-lg-12">
+	                    <div class="section-title text-center mb-30">
+	                        <h4>{{ 'products.general.related_products_title' | t }}</h4>
+	                    </div>
+	                </div>
+	            </div>
+
+	            <div class="row product-slider-active">
+	            	{% for product in collection.products limit: number_of_products_to_fetch %}
+						{% if product.handle == current_product.handle %}
+							{% assign current_product_found = true %}
+						{% else %}
+							{% unless current_product_found == false and forloop.last %}
+								<div class="col-lg-12">
+				                    <!-- Single Product Item Start -->
+				                    <div class="single-product-item text-center">
+				                        <div class="products-images">
+				                            <a href="{{ product.url }}" title="{{ product.title }}" class="product-thumbnail">
+				                                {% assign image = product.images.first %}
+				                                <img src="{{ image.src | product_img_url: 'large'  }}" class="img-fluid" alt="{{ image.alt | escape }}">
+				                                {% comment %} 
+													require product
+												{% endcomment %}
+
+												{% assign on_sale = false %}
+												{% assign sale_text = 'products.product.sale' | t %}
+												{% if product.compare_at_price > product.price %}
+												  	{% assign on_sale = true %}
+												{% endif %}
+
+												{% if on_sale %}
+												  	<span class="ribbon onsale">
+				                                    	On Sale
+				                                    </span>
+												{% endif %}
+
+												{% assign sold_out = true %}
+												{% assign sold_out_text = 'products.product.sold_out' | t %}
+												{% if product.available %}
+												  	{% assign sold_out = false %}
+												{% endif %}
+
+												{% if sold_out %}
+												  	<span class="ribbon out-of-stock ">
+						                                Out Of Stock
+						                            </span>
+												{% endif %}                
+				                            </a>
+				                            <div class="product-actions">
+				                                <a href="#" class="button quickview"
+													data-product-handle="{{ product.handle }}"
+													data-toggle="modal">
+													<i class="p-icon icon-plus"></i><span class="tool-tip">Quick View</span>
+												</a>
+												<a href="#" class="button btn-cart add_to_cart_button" data-product-id="{{ product.variants[0].id }}">
+													<i class="p-icon icon-bag2"></i> <span class="tool-tip">Add to cart</span>
+												</a>
+				                            </div>
+				                        </div>
+
+				                        <div class="product-content">
+				                            <h6 class="prodect-title">
+				                            	<a href="{{ product.url }}" title="{{ product.title }}">
+														{{ product.title }}
+												</a>
+											</h6>
+				                            <div class="prodect-price">
+				                                <span class="amount">{{ product.price | money }}</span>
+				                            </div>
+				                        </div>
+				                    </div><!-- Single Product Item End -->
+				                </div>
+							{% endunless %}
+						{% endif %}
+					{% endfor %}
+	            </div>
+			</div>
+		{% endif %}
+    </div>
+</div>

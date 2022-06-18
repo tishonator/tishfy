@@ -1,0 +1,71 @@
+{% assign mainmenu = settings.megamenu_menu %}
+<nav class="navigation-menu">
+	<ul class="justify-content-center">
+
+		{% assign menuIndex = 1 %}
+
+		{% for lvl1_link in linklists[mainmenu].links %}
+
+			{% assign lvl1_link_handle = lvl1_link.handle %}
+
+			{% capture displayCustomContent %}display_megamenu_custom_content_{{ menuIndex }}{% endcapture %}
+
+			{% if settings[displayCustomContent] %}
+
+				<li class="has-children {% if lvl1_link.active %} current-menu-item{% endif %} aligned-fullwidth" data-alignsub="fullwidth" data-level="1">
+					<a href="{{ lvl1_link.url }}" class="dropdown-toggle">
+						<span>{{ lvl1_link.title }}</span>
+					</a>
+					<div class="megamenu megamenu--mega">
+						{% capture customContent %}megamenu_custom_content_{{ menuIndex }}{% endcapture %}
+						{{ settings[customContent] }}
+					</div>
+				</li>
+
+			{% else %}
+
+				{% assign lvl2_links = linklists[lvl1_link_handle].links %}
+				{% if lvl2_links != blank %}
+				    <li class="has-children has-children--multilevel-submenu {% if lvl1_link.active %} current-menu-item{% endif %}" aria-haspopup="true" data-level="1">
+						<a href="{{ lvl1_link.url }}" class="site-nav__link dropdown-toggle">
+							<span>{{ lvl1_link.title }}</span>
+						</a>
+						<ul class="submenu">
+							{% for lvl2_link in lvl2_links %}
+								{% assign lvl2_link_handle = lvl2_link.handle %}
+								{% assign lvl3_links = linklists[lvl2_link_handle].links %}
+								<li class="{% if lvl2_link.active %} current-menu-item{% endif %}" aria-haspopup="true" data-level="2">
+									<a href="{{ lvl2_link.url }}" class="site-nav__link dropdown-toggle">
+										<span>{{ lvl2_link.title }}</span>
+									</a>
+								</li>
+								{% if lvl3_links != blank %}
+									{% for lvl3_link in lvl3_links %}
+										<li class="sub-menu-level-3 {% if lvl3_link.active %} current-menu-item{% endif %}">
+											<a href="{{ lvl3_link.url }}">
+												<span>{{ lvl3_link.title }}</span>
+											</a>
+										</li>
+									{% endfor %}
+								{% endif %}
+								
+							{% endfor %}
+						</ul>
+				    </li>	
+			  	{% else %}
+					<li class="menu-item{% if lvl1_link.active %} current-menu-item{% endif %}">
+						<a href="{{ lvl1_link.url }}">
+							<span>{{ lvl1_link.title }}</span>
+						</a>
+					</li>
+			  	{% endif %}
+
+			{% endif %}
+
+			{% assign menuIndex = menuIndex | plus: 1 %}
+
+		{% endfor %}
+	</ul>
+</nav>
+  
+

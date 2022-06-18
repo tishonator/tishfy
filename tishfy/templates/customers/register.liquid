@@ -1,0 +1,50 @@
+{% render 'breadcrumb' %}
+
+<div id="main-content" class="section-space--pt_60 border-bottom">
+	<div class="content-area container">
+		<div class="site-main">
+			<div class="col-sm-6 col-sm-offset-3 user-form form-horizontal">
+				{% form 'create_customer' %}
+					{% if form.errors | default_errors %}
+						<div class="alert alert-danger hidden">
+	        				{{ form.errors | default_errors }}
+	        			</div>
+        			{% endif %}
+
+					<div class="form-group">
+      					<label for="FirstName" class="col-sm-3 control-label">{{ 'customer.register.first_name' | t }}</label>
+				        <div class="col-sm-8">
+      						<input class="form-control" type="text" name="customer[first_name]" id="FirstName" placeholder="{{ 'customer.register.first_name' | t }}" {% if form.first_name %}value="{{ form.first_name }}"{% endif %}  autofocus>
+				        </div>
+        			</div>
+        			<div class="form-group">
+      					<label for="LastName" class="col-sm-3 control-label">{{ 'customer.register.last_name' | t }}</label>
+				        <div class="col-sm-8">
+      						<input class="form-control" type="text" name="customer[last_name]" id="LastName" placeholder="{{ 'customer.register.last_name' | t }}" {% if form.last_name %}value="{{ form.last_name }}"{% endif %} >
+				        </div>
+        			</div>
+        			<div class="form-group">
+      					<label for="Email" class="col-sm-3 control-label">{{ 'customer.register.email' | t }}</label>
+				        <div class="col-sm-8">
+      						<input class="form-control" type="email" name="customer[email]" id="Email" placeholder="{{ 'customer.register.email' | t }}" {% if form.errors contains "email" %} class="error"{% elsif form.email %} value="{{ form.email }}"{% endif %}  >
+				        </div>
+        			</div>
+        			<div class="form-group">
+      					<label for="CreatePassword" class="col-sm-3 control-label">{{ 'customer.register.password' | t }}</label>
+				        <div class="col-sm-8">
+      						<input class="form-control" type="password" name="customer[password]" id="CreatePassword" placeholder="{{ 'customer.register.password' | t }}" {% if form.errors contains "password" %} class="error"{% endif %}>
+				        </div>
+        			</div>
+
+        			<div class="form-group">
+						<div class="col-sm-offset-3 col-sm-8">
+							<input type="submit" value="{{ 'customer.register.submit' | t }}" class="btn btn--full btn--black">
+							<a class="btn btn-default" href="{{ shop.url }}">{{ 'customer.register.cancel' | t }}</a>
+						</div>
+					</div>
+
+				{% endform %}
+			</div>
+		</div> <!-- end .site-main -->
+	</div> <!-- end .content-area -->
+</div> <!-- end .main-content -->

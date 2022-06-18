@@ -1,0 +1,328 @@
+{% if settings.display_homepage_slider %}
+	<div class="hero-box-area">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-12">
+                    <!-- Hero Slider Area Start -->
+                    <div class="hero-area hero-slider-7">
+                    	{% for i in (1..5) %}
+							{% capture enable %}display_slide_{{ i }}{% endcapture %}
+							{% capture image %}slide{{ i }}.png{% endcapture %}
+							{% capture text %}slide_{{ i }}_content{% endcapture %}
+							{% if settings[enable] %}
+								<div class="single-hero-slider-7">
+		                            <div class="container">
+		                                <div class="row">
+		                                    <div class="col-lg-12">
+		                                        <div class="hero-content-wrap">
+		                                            <div class="hero-text-7 mt-lg-5">
+		                                                {{ settings[text] }}
+		                                            </div>
+		                                            <div class="inner-images">
+		                                                <div class="image-one">
+		                                                    <img src="{{ image | asset_url }}"
+		                                                    	alt="slide {{ i }}" class="img-fluid" />
+		                                                </div>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+							{% endif %}
+						{% endfor %}
+                    </div>
+                    <!-- Hero Slider Area End -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+{% if settings.display_homepage_welcome_msg %}
+	<div class="about-us-area section-space--ptb_30">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="about-us-content_6 text-center">
+                    	{% if settings.homepage_welcome_title != blank %}
+							<h2 class="section-title--one section-title--center">{{ settings.homepage_welcome_title }}</h2>
+						{% endif %}
+						{% if settings.homepage_welcome_text != blank %}
+							<p>{{ settings.homepage_welcome_text }}</p>
+						{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+		{% if settings.display_homepage_products %}
+
+			<div class="section-element section-space--ptb_30">
+				<div class="container">
+					{% if settings.homepage_products_title != blank %}
+						<h3 class="heading-title section-title--one section-title--center">
+							<span>{{ settings.homepage_products_title }}</span>
+						</h3>
+					{% endif %}
+
+					{% if settings.homepage_products_collection != blank %}
+
+						{% assign column = settings.homepage_products_per_row %}
+						{% assign limit = settings.homepage_products_count %}
+						{% assign custom_collection = settings.homepage_products_collection %}
+						{% comment %}
+							Collection type includes:
+								new_arrivals
+								bestseller
+								sell_off
+								featured
+								top_rate
+								hot_deals
+						{% endcomment %}
+
+						{% if custom_collection != blank %}
+							{% assign collection = collections[custom_collection] %}
+						{% else %}
+							{% capture collection_setting %}{{ collection_type }}_product_collection{% endcapture %}
+							{% assign collection = collections[settings[collection_setting]] %}
+						{% endif %}
+						{% assign custom_collection = blank %}
+
+
+
+						{% comment %}
+							require collection
+						{% endcomment %}
+						{% case column %}
+						    {% when '2' %}
+						   		{% assign class-column = 'col-sm-6' %}
+						   	{% when '3' %}
+						   		{% assign class-column = 'col-sm-4' %}
+						   	{% when '4' %}
+						   		{% assign class-column = 'col-md-3 col-sm-6' %}
+						   	{% when '5' %}
+						   		{% assign class-column = 'col-md-2 col-sm-4' %}
+						   	{% when '6' %}
+						   		{% assign class-column = 'col-sm-4 col-md-2' %}
+						    {% else %}
+								{% assign class-column = 'col-md-3 col-sm-6' %}    
+						{% endcase %}
+
+						{% assign productIndex = 1 %}
+
+						<div class="row product-column-{{ column }}">
+						{% for product in collection.products limit:limit %}
+							<div class="{{ class-column }}">
+								{% comment %} 
+									require product
+								{% endcomment %}
+
+								{% assign on_sale = false %}
+								{% assign sale_text = 'products.product.sale' | t %}
+								{% if product.compare_at_price > product.price %}
+								  	{% assign on_sale = true %}
+								{% endif %}
+
+								{% assign sold_out = true %}
+								{% assign sold_out_text = 'products.product.sold_out' | t %}
+								{% if product.available %}
+								  	{% assign sold_out = false %}
+								{% endif %}
+
+								<div class="single-product-item text-center">	
+									<div class="products-images">
+										<a href="{{ product.url }}" title="{{ product.title }}" class="title">
+											{% assign image = product.images.first %}
+											{% assign second_image = product.images[1] %}
+											<img src="{{ image.src | product_img_url: 'large'  }}"
+												class="img-fluid" alt="{{ image.alt | escape }}" />
+
+											{% if on_sale %}
+												<span class="ribbon onsale">Sale!</span>
+											{% endif %}
+
+											{% if sold_out %}
+												<span class="ribbon out-of-stock">Out Of Stock</span>
+											{% endif %}
+
+											{% comment %}
+												{% if second_image %}
+													<img src="{{ second_image.src | product_img_url: 'large'  }}" class="image-hover" alt="{{ second_image.alt | escape }}">
+												{% endif %}
+											{% endcomment %}
+										</a>
+										<div class="product-actions">
+											<a href="#" class="button quickview"
+												data-product-handle="{{ product.handle }}"
+												data-toggle="modal">
+												<i class="p-icon icon-plus"></i><span class="tool-tip">Quick View</span>
+											</a>
+											<a href="#" class="button btn-cart add_to_cart_button" data-product-id="{{ product.variants[0].id }}">
+												<i class="p-icon icon-bag2"></i> <span class="tool-tip">Add to cart</span>
+											</a>
+										</div>
+									</div>
+									<div class="product-content">
+                                        <h6 class="prodect-title">
+                                        	<a href="{{ product.url }}" title="{{ product.title }}">
+												{{ product.title }}
+											</a>
+                                        </h6>
+                                        <div class="prodect-price">
+                                            <span class="amount">{{ product.price | money }}</span>
+                                        </div>
+                                        {% comment %}
+	                                        <div class="category">
+												{% for collection in product.collections %}
+													{% unless forloop.last %}
+														<a href="{{ collection.url }}">{{ collection.title }}, </a>
+													{% else %}
+														<a href="{{ collection.url }}">{{ collection.title }}</a>				
+													{% endunless %}
+												{% endfor %}
+											</div>
+										{% endcomment %}
+                                    </div>
+								</div>
+							</div>
+
+							{% assign index_modulo = productIndex | modulo: column %}
+							{% if index_modulo == 0 %}
+								<div class="clearfix"></div>
+							{% endif %}
+							{% assign productIndex = productIndex | plus: 1 %}
+
+						{% endfor %}
+						</div>
+
+					{% endif %}
+				</div>
+			</div>
+
+		{% endif %}
+
+		{% if settings.display_homepage_blog %}
+
+			<div class="blog-page-wrapper section-space--pt_30 section-space--pb_30">
+				<div class="container">
+					{% if settings.homepage_blog_title != blank %}
+						<h3 class="heading-title section-title--one section-title--center">
+							<span>{{ settings.homepage_blog_title }}</span>
+						</h3>
+					{% endif %}
+					{% assign blog = blogs[settings.homepage_blog_name] %}
+					{% assign limit = settings.homepage_blog_limit %}
+
+					{% if blog.empty? || blog.articles_count == 0 %}
+						<div>There is no article to show at the moment</div>
+					{% else %}
+						<div class="row">
+							{% for article in blog.articles | limit: limit %}
+								<div class="col-lg-4 col-md-6 col-sm-6 col-12">
+			                        <!-- Single Blog Item Start -->
+			                        <div class="single-blog-item mt-40">
+			                            <div class="blog-thumbnail-box">
+			                                <a href="{{ article.url }}" class="thumbnail">
+			                                	{% if article.image %}<img src="{{ article | img_url: 'large' }}" alt="{{ article.title }}" class="img-fluid" />{% endif %}
+			                                </a>
+			                                <a href="{{ article.url }}" class="btn-blog"> Read more </a>
+			                            </div>
+			                            <div class="blog-contents">
+			                                <h6 class="blog-title">
+			                                	<a href="{{ article.url }}">
+			                                		{{ article.title }}
+			                                	</a>
+			                                </h6>
+			                                <div class="meta-tag-box">
+			                                    <div class="meta date"><span>{{ article.published_at | date: "%B %d, %Y" }}</span></div>
+			                                    <div class="meta author"><span>
+			                                    <a href="{{ article.user.homepage }} ">{{ article.author }}</a></span></div>
+
+			                                    {% if article.tags %}
+				                                    <div class="meta cat">
+					                                    {% for tag in article.tags %}
+				                                    		<span>
+														    {{ tag }}
+														    </span>
+														{% endfor %}
+													</div>
+												{% endif %}
+			                                </div>
+			                            </div>
+			                        </div><!-- Single Blog Item End -->
+			                    </div>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+			</div> <!-- End .section-white -->
+		{% endif %}
+
+
+		{% if settings.display_brands %}
+
+			{% if settings.brands_title != blank %}
+				<div class="section-space--pt_30">
+	                <h3 class="heading-title section-title--one section-title--center">{{ settings.brands_title }}</h3>
+	            </div>
+			{% endif %}
+
+			<!-- Our Brand Area Start -->
+            <div class="our-brand-area section-space--pb_30">
+                <div class="container">
+                    <div class="row brand-slider-active">                       
+                    	{% for i in (1..20) %}
+							{% capture enable %}display_brand_{{ i }}{% endcapture %}
+							{% capture image %}brand{{ i }}.png{% endcapture %}
+							{% capture link %}brand_{{ i }}_link{% endcapture %}
+							{% if settings[enable] %}
+								<div class="col-lg-12">
+									<div class="single-brand-item">
+		                                <a href="{{ settings[link] }}" target="_blank">
+		                                	<img src="{{ image | asset_url }}" alt="brand {{ i }}.png">
+		                                </a>
+		                            </div>
+	                            </div>
+							{% endif %}
+						{% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Our Brand Area End -->
+
+        {% endif %}
+
+
+{% if settings.display_newsletter_homepage %}
+
+	<div class="our-newsletter-area  section-space--ptb_20">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="newsletter--box">
+                        <div class="row align-items-center">
+                            <div class="col-lg-5 col-md-4">
+                                <div class="section-title small-mb__40 tablet-mb__40">
+                                    <h4 class="section-title section-title--one">{{ settings.newsletter_homepage_title }}</h4>
+                                    <p>{{ settings.newsletter_homepage_desc }}</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-8">
+                                <div class="newsletter-wrap">
+                                    {{ settings.newsletter_homepage_form_code }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endif %}

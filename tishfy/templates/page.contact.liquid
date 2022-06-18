@@ -1,0 +1,66 @@
+{% render 'breadcrumb' %}
+
+<div id="main-content" class="section-space--pt_60">
+    <div class="content-area contact-styte">
+    	<div class="section-element container">
+    		<p> {{ page.content }} </p>
+    	</div>
+		<div class="section-element">
+			<div class="container">
+				<div class="row">
+		            <div class="col-sm-12 ">
+		                <div class="wrapper">
+		                    {% form 'contact' %}
+			                    {{ form.errors | default_errors }}
+			                    <div class="row">
+			                        <div class="col-sm-4">
+			                            <div class="form-group">
+			                                {% assign name_attr = 'contact.form.name' | t | handle %}
+			                                <label for="ContactFormName">{{ 'contact.form.name' | t }} *</label>
+			                                <span class="your-name">
+			                                    <input type="text" id="ContactFormName" class="form-control" name="contact[{{ name_attr }}]" placeholder="{{ 'contact.form.name' | t }}"  value="{% if form[name_attr] %}{{ form[name_attr] }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
+			                                </span>
+			                            </div>
+			                        </div>
+
+			                        <div class="col-sm-4">
+			                            <div class="form-group">
+			                                <label for="ContactFormEmail">{{ 'contact.form.email' | t }} *</label>
+			                                <span class="your-email">
+			                                    <input type="email" id="ContactFormEmail" class="form-control" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}"   value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required>
+			                                </span>
+			                            </div>
+			                        </div>
+
+			                        <div class="col-sm-4">
+			                            <div class="form-group">
+			                                <label for="ContactFormSubject">Subject *</label>
+			                                <span class="your-subject">
+			                                    <input type="text" id="ContactFormSubject" class="form-control" name="contact[subject]" placeholder="Subject"   value="{% if form.subject %}{{ form.subject }}{% endif %}" required>
+			                                </span>
+			                            </div>
+			                        </div>
+			                    </div>
+
+			                    <div class="form-group">
+			                        <label for="ContactFormMessage" class="label--hidden">{{ 'contact.form.message' | t }} *</label>
+			                        <span class="your-message">
+			                            <textarea cols="40" rows="10" id="ContactFormMessage" class="form-control" name="contact[body]" placeholder="{{ 'contact.form.message' | t }}">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+			                        </span>
+			                    </div>
+
+			                    <p><input type="submit" class="btn btn--black btn-contact" value="{{ 'contact.form.send' | t }}"></p>
+
+			                    {% if form.posted_successfully? %}
+			                        <p class="note form-success">
+			                            {{ 'contact.form.post_success' | t }}
+			                        </p>
+			                    {% endif %}
+		                    {% endform %}
+		                </div>
+		            </div>
+		        </div>
+			</div>
+		</div>
+    </div>
+</div>
