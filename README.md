@@ -1,5 +1,7 @@
 Tishfy – Furniture Shopify Theme
 
+DEMO: https://tishfy-demo.myshopify.com/
+
 
 Included files:
 
